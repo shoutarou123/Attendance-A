@@ -1,16 +1,21 @@
 module SessionsHelper
   
-  def log_in(user) # 引数に渡されたユーザーオブジェクトでログインします。
-    session[:user_id] = user.id # userのidレコードをsessionに入れる
+  def log_in(user) # 引数に渡されたﾕｰｻﾞｰｵﾌﾞｼﾞｪｸﾄでﾛｸﾞｲﾝします。
+    session[:user_id] = user.id # userのidﾚｺｰﾄﾞをsessionに入れる
   end
 
-  def current_user # 現在ログイン中のユーザーがいる場合オブジェクトを返します。
-    if session[:user_id] # userのidレコードをsessionに入っていれば下の処理実行
+  def log_out
+    session.delete(:user_id) # ｾｯｼｮﾝからﾕｰｻﾞｰIDを削除
+    @current_user = nil # current_userﾒｿｯﾄﾞによって@current_userに代入されたﾕｰｻﾞｰｵﾌﾞｼﾞｪｸﾄ削除
+  end
+
+  def current_user # 現在ﾛｸﾞｲﾝ中のﾕｰｻﾞｰがいる場合ｵﾌﾞｼﾞｪｸﾄを返します。
+    if session[:user_id] # userのidﾚｺｰﾄﾞをsessionに入っていれば下の処理実行
       @current_user ||= User.find_by(id: session[:user_id])
     end
   end
 
-  def logged_in? # 現在ログイン中のユーザーがいればtrue、そうでなければfalseを返します。
-    !current_user.nil? # 現在ログインしているuserがnilではない時ture、nilだったらfalse
+  def logged_in? # 現在ﾛｸﾞｲﾝ中のﾕｰｻﾞｰがいればtrue、そうでなければfalseを返します。
+    !current_user.nil? # 現在ﾛｸﾞｲﾝしているuserがnilではない時ture、nilだったらfalse
   end
 end

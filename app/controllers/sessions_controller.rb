@@ -13,4 +13,10 @@ class SessionsController < ApplicationController
       render 'new', status: :unprocessable_entity # ログインページに遷移する。status: :unprocessable_entityがないとRails7はエラー表示されない。
     end
   end
+
+  def destroy
+    log_out # ﾛｸﾞｱｳﾄしたら(sessions_helper参照)
+    flash[:success] = 'ログアウトしました。'
+    redirect_to root_url # ﾄｯﾌﾟ画面に遷移
+  end
 end
