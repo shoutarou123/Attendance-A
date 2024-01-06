@@ -1,10 +1,10 @@
-<header class="navbar navbar-fixed-top navbar-inverse">
-  <div class="container">
-    <%= link_to "Attendance App", root_path, id: "logo" %>
-    <nav>
-      <ul class="nav navbar-nav navbar-right">
-        <li><%= link_to "Top", root_path %></li>
-        <li><%= link_to "Log in", '#' %></li>
+<header class="navbar navbar-fixed-top navbar-inverse"> <!--navbar-fixed-top――これを付けると、ナビゲーションバーがブラウザの最上部に固定されて表示されます。navbar-inverse――これは、反転表示です。黒字に白い文字でバーが表示されます。-->
+  <div class="container"> <!--コンテンツの横幅を調整することができる。Containerがないと、画面の左端から右端まで画像や文字などがよってしまうので、とてもみにくいウェブサイトになる。-->
+    <%= link_to "勤怠システム", root_path, id: "logo" %>
+    <nav> <!--サイトのメインメニュー-->
+      <ul class="nav navbar-nav navbar-right"> <!--unordered list(順序のないリスト)、navbar-nav フルハイトで軽量なナビゲーション（ドロップダウンのサポートを含む）、navbar-right右寄せ-->
+        <li><%= link_to "トップへ", root_path %></li> <!--ulと一緒に使う-->
+        <li><%= link_to "ログイン", login_path %></li>
       </ul>
     </nav>
   </div>
