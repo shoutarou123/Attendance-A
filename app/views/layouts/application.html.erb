@@ -3,10 +3,8 @@
   <head> <!--headは表示されない部分-->
     <title><%= full_title(yield(:title)) %></title> <!--上部ﾀｲﾄﾙ部分-->
     <%= csrf_meta_tags %> <!--Railsｱﾌﾟﾘ外部からの不正ｱｸｾｽに対処するためのHTMLﾀｸﾞ。ｸﾛｽｻｲﾄﾘｸｴｽﾄﾌｫｰｼﾞｪﾘ(CSRF)の対策のために記述する。-->
-    <%= stylesheet_link_tag    'application', media: 'all',
-                               'data-turbolinks-track': 'reload' %> <!--Railsが提供するCSSﾀｸﾞを生成します。-->
-    <%= javascript_include_tag 'application',
-                               'data-turbolinks-track': 'reload' %> <!--Railsが提供するJavaScriptタグを生成します。-->
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %> <!--Railsが提供するCSSﾀｸﾞを生成します。-->
+    <%= javascript_importmap_tags %> <!--Railsが提供するJavaScriptタグを生成します。-->
     <%= render 'layouts/shim' %>
   </head>
   <body> <!--本文のデザイン-->
@@ -18,5 +16,13 @@
       <%= yield %>
       <%= debug(params) if Rails.env.development? %> <!--開発環境のみparams内容を出力-->
     </div>
+    <!-- jQuery and Bootstrap scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('.dropdown-toggle').dropdown();
+      });
+    </script>
   </body>
 </html>
