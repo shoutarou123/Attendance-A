@@ -35,8 +35,9 @@ class User < ApplicationRecord
     update_attribute(:remember_digest, User.digest(remember_token)) # User.digestﾒｿｯﾄﾞを使ってremember_tokenをﾊｯｼｭ化し、その結果をremember_digest属性に保存。update_attributeは、ﾃﾞｰﾀﾍﾞｰｽのﾚｺｰﾄﾞを更新するためのActive Recordﾒｿｯﾄﾞの1つです。
   end # update_attributesと違いsを付けないことでﾊﾞﾘﾃﾞｰｼｮﾝ素通りさせている
 
-  # トークンがダイジェストと一致すればtrueを返します。
-  def authenticated?(remember_token)
+ 
+  def authenticated?(remember_token) # ﾄｰｸﾝがﾀﾞｲｼﾞｪｽﾄと一致すればtrueを返します。
+    return false if remember_digest.nil? # ﾀﾞｲｼﾞｪｽﾄが存在しない場合はfalseを返して終了。
     BCrypt::Password.new(remember_digest).is_password?(remember_token) # ﾄｰｸﾝとﾀﾞｲｼﾞｪｽﾄが一致すればtrue。
   end
 

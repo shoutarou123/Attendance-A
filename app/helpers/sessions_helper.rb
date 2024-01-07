@@ -10,7 +10,14 @@ module SessionsHelper
     cookies.permanent[:remember_token] = user.remember_token # ﾄｰｸﾝを永続ｸｯｷｰに保存
   end
 
-  def log_out
+  def forget(user) # 永続的ｾｯｼｮﾝを破棄します
+    user.forget # Userﾓﾃﾞﾙ参照
+    cookies.delete(:user_id)
+    cookies.delete(:remember_token)
+  end
+
+  def log_out # ｾｯｼｮﾝと@current_userを破棄します
+    forget(current_user)
     session.delete(:user_id) # ｾｯｼｮﾝからﾕｰｻﾞｰIDを削除
     @current_user = nil # current_userﾒｿｯﾄﾞによって@current_userに代入されたﾕｰｻﾞｰｵﾌﾞｼﾞｪｸﾄ削除
   end
