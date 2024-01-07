@@ -33,5 +33,10 @@ class User < ApplicationRecord
   def remember
     self.remember_token = User.new_token # Userｸﾗｽのnew_tokenﾒｿｯﾄﾞを呼び出して新しいﾄｰｸﾝを生成し、そのﾄｰｸﾝをremember_token属性に代入。
     update_attribute(:remember_digest, User.digest(remember_token)) # User.digestﾒｿｯﾄﾞを使ってremember_tokenをﾊｯｼｭ化し、その結果をremember_digest属性に保存。update_attributeは、ﾃﾞｰﾀﾍﾞｰｽのﾚｺｰﾄﾞを更新するためのActive Recordﾒｿｯﾄﾞの1つです。
+  end # update_attributesと違いsを付けないことでﾊﾞﾘﾃﾞｰｼｮﾝ素通りさせている
+
+  # トークンがダイジェストと一致すればtrueを返します。
+  def authenticated?(remember_token)
+    BCrypt::Password.new(remember_digest).is_password?(remember_token) # ﾄｰｸﾝとﾀﾞｲｼﾞｪｽﾄが一致すればtrue。
   end
 end
