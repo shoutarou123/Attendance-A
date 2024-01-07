@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+
+  attr_accessor :remember_token # remember_tokenという仮想の属性を作成する。
   before_save { self.email = email.downcase } # email小文字化
 
   validates :name,  presence: true, length: { maximum: 50 }
@@ -10,4 +12,26 @@ class User < ApplicationRecord
                       # 2. ﾍﾟｱとなる仮想的なｶﾗﾑであるpasswordとpassword_confirmationが使えるようになる。さらに存在性と値が一致するかどうかの検証も追加される。
                       # 3. authenticateﾒｿｯﾄﾞが使用可能となる。このﾒｿｯﾄﾞは引数の文字列がﾊﾟｽﾜｰﾄﾞと一致した場合ｵﾌﾞｼﾞｪｸﾄを返し、ﾊﾟｽﾜｰﾄﾞが一致しない場合はfalseを返す。
   validates :password, presence: true, length: { minimum: 6}
+
+  # 渡された文字列のハッシュ値を返します。
+  def User.digest(string) # User.digestは、文字列を暗号化して安全な形式で保存するためにBCryptを使用
+    cost = # このﾒｿｯﾄﾞは引数として与えられた文字列をﾊｯｼｭ化し、安全な形式で保存するためのBCryptの機能を使っている。
+      if ActiveModel::SecurePassword.min_cost # min_costがtrueであれば
+        BCrypt::Engine::MIN_COST # BCryptのｺｽﾄを最小化
+      else
+        BCrypt::Engine.cost # BCryptのｺｽﾄは標準
+      end
+    BCrypt::Password.create(string, cost: cost) # 与えられた文字列をBCryptを用いてﾊｯｼｭ化し、安全な形式で返す。costｵﾌﾟｼｮﾝは、ﾊｯｼｭ化する際の計算ｺｽﾄを指定する。そのｺｽﾄは、min_costがtrueの場合はBCryptの最小ｺｽﾄ、それ以外の場合は標準のｺｽﾄに設定される。
+  end
+
+  # ランダムなトークンを返します。
+  def User.new_token
+    SecureRandom.urlsafe_base64
+  end
+
+  # 永続ｾｯｼｮﾝのためﾊｯｼｭ化したﾄｰｸﾝをﾃﾞｰﾀﾍﾞｰｽに記憶します。
+  def remember
+    self.remember_token = User.new_token # Userｸﾗｽのnew_tokenﾒｿｯﾄﾞを呼び出して新しいﾄｰｸﾝを生成し、そのﾄｰｸﾝをremember_token属性に代入。
+    update_attribute(:remember_digest, User.digest(remember_token)) # User.digestﾒｿｯﾄﾞを使ってremember_tokenをﾊｯｼｭ化し、その結果をremember_digest属性に保存。update_attributeは、ﾃﾞｰﾀﾍﾞｰｽのﾚｺｰﾄﾞを更新するためのActive Recordﾒｿｯﾄﾞの1つです。
+  end
 end
