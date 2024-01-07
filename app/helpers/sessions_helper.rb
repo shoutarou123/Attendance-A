@@ -11,7 +11,7 @@ module SessionsHelper
 
   def current_user # 現在ﾛｸﾞｲﾝ中のﾕｰｻﾞｰがいる場合ｵﾌﾞｼﾞｪｸﾄを返します。
     if session[:user_id] # userのidﾚｺｰﾄﾞをsessionに入っていれば下の処理実行
-      @current_user ||= User.find_by(id: session[:user_id])
+      @current_user ||= User.find_by(id: session[:user_id]) # @current_userがnilだったら、Userの中のidカラムの中のsessionに入っているuser.idを@current_userに代入。nilじゃなかったらそのまま@current_userを使用。
     end
   end
 
