@@ -4,6 +4,7 @@ class User < ApplicationRecord
   before_save { self.email = email.downcase } # email小文字化
 
   validates :name,  presence: true, length: { maximum: 50 }
+
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i # 正規表現
   validates :email, presence: true, length: { maximum: 100 },
                     format: { with: VALID_EMAIL_REGEX }, # 正規表現をformatにしている
@@ -24,8 +25,7 @@ class User < ApplicationRecord
     BCrypt::Password.create(string, cost: cost) # 与えられた文字列をBCryptを用いてﾊｯｼｭ化し、安全な形式で返す。costｵﾌﾟｼｮﾝは、ﾊｯｼｭ化する際の計算ｺｽﾄを指定する。そのｺｽﾄは、min_costがtrueの場合はBCryptの最小ｺｽﾄ、それ以外の場合は標準のｺｽﾄに設定される。
   end
 
-  # ランダムなトークンを返します。
-  def User.new_token
+  def User.new_token # ﾗﾝﾀﾞﾑなﾄｰｸﾝを返します。
     SecureRandom.urlsafe_base64
   end
 
@@ -38,5 +38,9 @@ class User < ApplicationRecord
   # トークンがダイジェストと一致すればtrueを返します。
   def authenticated?(remember_token)
     BCrypt::Password.new(remember_digest).is_password?(remember_token) # ﾄｰｸﾝとﾀﾞｲｼﾞｪｽﾄが一致すればtrue。
+  end
+
+  def forget # ﾕｰｻﾞｰのﾛｸﾞｲﾝ情報を破棄します。
+    update_attribute(:remember_digest, nil) # attribute(属性)
   end
 end
