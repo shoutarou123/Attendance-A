@@ -1,14 +1,14 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update] # correct_userのbefore_actionで同じ@userが2回使用されてしまうため本ﾒｿｯﾄﾞを各ｱｸｼｮﾝに定義している
-  before_action :logged_in_user, only: [:show, :edit, :update] # ﾛｸﾞｲﾝしていなければ詳細画面、編集画面、編集更新できない
+  before_action :set_user, only: [:show, :edit, :update, :destroy] # correct_userのbefore_actionで同じ@userが2回使用されてしまうため本ﾒｿｯﾄﾞを各ｱｸｼｮﾝに定義している
+  before_action :logged_in_user, only: [:show, :edit, :update, :destroy] # ﾛｸﾞｲﾝしていなければ詳細画面、編集画面、編集更新、削除できない
   before_action :correct_user, only: [:edit, :update] # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
-  
+  before_action :admin_user, only: :destroy # 管理権限がないと削除できない。
+
   def index
     @users = User.paginate(page: params[:page]) # User.allから変更。paginateではｷｰが:pageで値がﾍﾟｰｼﾞ番号のﾊｯｼｭを引数にとります。User.paginateは:pageﾊﾟﾗﾒｰﾀに基づき、ﾃﾞｰﾀﾍﾞｰｽから一塊のﾃﾞｰﾀを取得する。ﾃﾞﾌｫﾙﾄは30件。
   end
 
   def show
-    @user = User.find(params[:id])
   end
   
   def new
@@ -27,17 +27,21 @@ class UsersController < ApplicationController
   end
 
   def edit
-    @user = User.find(params[:id])
   end
 
   def update
-    @user = User.find(params[:id])
     if @user.update(user_params)
       flash[:success] = "ユーザー情報を更新しました。"
       redirect_to @user # redirect_to user_url(@user)と同じ意味
     else
       render 'edit', status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @user.destroy
+    flash[:success] = "#{@user.name}のデータを削除しました。"
+    redirect_to users_url # 一覧へ遷移
   end
 
   private
@@ -64,4 +68,8 @@ class UsersController < ApplicationController
       # @user = User.find(params[:id])の記述が不要になる理由は上記のset_userで定義しており、引数に@userを指定しているため。
       redirect_to(root_url) unless current_user?(@user) # ﾕｰｻﾞｰが現在ﾕｰｻﾞｰと一致しなければ、ﾄｯﾌﾟﾍﾟｰｼﾞに遷移。ｾｯｼｮﾝﾍﾙﾊﾟｰのﾒｿｯﾄﾞを使用。
     end
-end
+
+    def admin_user # ｼｽﾃﾑ管理権限所有かどうか判定します。
+      redirect_to(root_url) unless current_user.admin? # 管理権限がなければﾄｯﾌﾟﾍﾟｰｼﾞに遷移
+    end
+  end
