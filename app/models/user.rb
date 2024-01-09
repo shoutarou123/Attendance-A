@@ -12,7 +12,7 @@ class User < ApplicationRecord
   has_secure_password # 1. ﾊｯｼｭ化したﾊﾟｽﾜｰﾄﾞを、ﾃﾞｰﾀﾍﾞｰｽのpassword_digestというｶﾗﾑに保存できるようになる。
                       # 2. ﾍﾟｱとなる仮想的なｶﾗﾑであるpasswordとpassword_confirmationが使えるようになる。さらに存在性と値が一致するかどうかの検証も追加される。
                       # 3. authenticateﾒｿｯﾄﾞが使用可能となる。このﾒｿｯﾄﾞは引数の文字列がﾊﾟｽﾜｰﾄﾞと一致した場合ｵﾌﾞｼﾞｪｸﾄを返し、ﾊﾟｽﾜｰﾄﾞが一致しない場合はfalseを返す。
-  validates :password, presence: true, length: { minimum: 6}
+  validates :password, presence: true, length: { minimum: 6}, allow_nil: true # allow_nil: true空でもﾊﾞﾘﾃﾞｰｼｮﾝ素通り。新規登録時はhas_secure_passwordが存在性を検証する。
 
   # 渡された文字列のハッシュ値を返します。
   def User.digest(string) # User.digestは、文字列を暗号化して安全な形式で保存するためにBCryptを使用
