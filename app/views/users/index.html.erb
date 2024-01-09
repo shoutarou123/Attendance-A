@@ -14,8 +14,8 @@
       <tr>
         <td><%= link_to user.name, user %></td> <!--勤怠画面に遷移-->
         <td>
-         <% if current_user.admin? && !current_user?(user) %>
-           <%= link_to "削除", user, data: { turbo_method: :delete, confirm: "削除してよろしいですか？" }, class: "btn btn-danger" %>
+         <% if current_user.admin? && !current_user?(user) %> <!--!current_user?(user)は、現在のﾕｰｻﾞｰが表示されているﾍﾟｰｼﾞのﾕｰｻﾞｰ以外であること。!がないと管理者だけ削除ﾎﾞﾀﾝが表示されてしまう-->
+           <%= link_to "削除", user, data: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-danger" %>
          <% end %>
         </td>
       </tr>
