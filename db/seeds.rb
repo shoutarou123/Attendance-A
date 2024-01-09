@@ -4,7 +4,8 @@ User.create!(name: "Sample User",
              email: "sample@email.com",
              affiliation: "管理者",
              password: "password",
-             password_confirmation: "password")
+             password_confirmation: "password",
+             admin: true) # 管理者だけが管理権限持つようにしている
 
 60.times do |n|
   name  = Faker::Name.name
