@@ -1,5 +1,8 @@
 class UsersController < ApplicationController
-
+  before_action :set_user, only: [:show, :edit, :update] # correct_userのbefore_actionで同じ@userが2回使用されてしまうため本ﾒｿｯﾄﾞを各ｱｸｼｮﾝに定義している
+  before_action :logged_in_user, only: [:show, :edit, :update] # ﾛｸﾞｲﾝしていなければ詳細画面、編集画面、編集更新できない
+  before_action :correct_user, only: [:edit, :update] # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
+  
   def show
     @user = User.find(params[:id])
   end
@@ -37,5 +40,23 @@ class UsersController < ApplicationController
 
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+
+    # beforeフィルター
+
+    def set_user # paramsﾊｯｼｭからﾕｰｻﾞｰを取得。使いまわすため記述したもの。
+      @user = User.find(params[:id])
+    end
+
+    def logged_in_user # ﾛｸﾞｲﾝ済のﾕｰｻﾞｰか確認します
+      unless logged_in? # ﾛｸﾞｲﾝしていなければ
+        flash[:danger] = "ログインしてください。"
+        redirect_to login_url # ﾛｸﾞｲﾝ画面遷移
+      end
+    end
+
+    def correct_user # ｱｸｾｽしたﾕｰｻﾞｰが現在ﾛｸﾞｲﾝしているﾕｰｻﾞｰか確認します
+      # @user = User.find(params[:id])の記述が不要になる理由は不明
+      redirect_to(root_url) unless current_user?(@user) # ﾕｰｻﾞｰが現在ﾕｰｻﾞｰと一致しなければ、ﾄｯﾌﾟﾍﾟｰｼﾞに遷移。ｾｯｼｮﾝﾍﾙﾊﾟｰのﾒｿｯﾄﾞを使用。
     end
 end
