@@ -8,10 +8,10 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password]) # 上記のemailかつそのuserのsessionの中のpasswordどちらもtrueであれば処理実行
       log_in user # session_helper参照
       params[:session][:remember_me] == '1' ? remember(user) : forget(user) # params[:session][:remember_me]が1の時ﾕｰｻﾞｰ情報を記憶し、1以外の時ﾕｰｻﾞｰ情報を記憶しない。
-      redirect_to user
+      redirect_back_or user # 記憶したURLに遷移 userを指定することでﾃﾞﾌｫﾙﾄURLとしている。 sessions_helper参照
     else
       flash.now[:danger] = '認証に失敗しました。'
-      render :new # ログインページに遷移する。status: :unprocessable_entityがないとRails7はエラー表示されない。
+      render 'new', status: :unprocessable_entity # ログインページに遷移する。status: :unprocessable_entityがないとRails7はエラー表示されない。
     end
   end
 

@@ -41,4 +41,13 @@ module SessionsHelper
   def logged_in? # 現在ﾛｸﾞｲﾝ中のﾕｰｻﾞｰがいればtrue、そうでなければfalseを返します。
     !current_user.nil? # 現在ﾛｸﾞｲﾝしているuserがnilではない時ture、nilだったらfalse
   end
+
+  def redirect_back_or(default_url) # 記憶しているURL(又はﾃﾞﾌｫﾙﾄURL)にﾘﾀﾞｲﾚｸﾄする
+    redirect_to(session[:forwarding_url] || default_url) # session[:forwarding_url]がtrueの時そこへ遷移、nilならﾃﾞﾌｫﾙﾄに遷]
+    session.delete(:forwarding_url) # 指定のﾊﾟｽに移動した後に:forwarding_urlを削除。次回ﾛｸﾞｲﾝした時に保存していたURLに飛ぶことを防いでいる。
+  end
+
+  def store_location # ｱｸｾｽしようとしたURLを記憶する
+    session[:forwarding_url] = request.original_url if request.get? # getﾘｸｴｽﾄの時だけ一時的ｾｯｼｮﾝへurlを格納。
+  end
 end

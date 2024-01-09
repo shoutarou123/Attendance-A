@@ -5,7 +5,7 @@
       <ul class="nav navbar-nav navbar-right"> <!--unordered list(順序のないリスト)、navbar-nav フルハイトで軽量なナビゲーション（ドロップダウンのサポートを含む）、navbar-right右寄せ-->
         <li><%= link_to "トップへ", root_path %></li> <!--ulと一緒に使う-->
         <% if logged_in? %> <!--loginできていればtrue-->
-          <li><%= link_to "ユーザーの一覧", '#' %></li>
+          <li><%= link_to "ユーザーの一覧", users_path %></li>
           <li><%= link_to "出勤社員一覧", '#' %></li>
           <li><%= link_to "拠点情報の修正", '#' %></li>
           <li><%= link_to "基本情報の修正", '#' %></li>
