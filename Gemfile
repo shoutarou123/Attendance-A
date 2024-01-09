@@ -15,6 +15,8 @@ gem "bootsnap", require: false
 gem "sassc-rails"
 gem 'bootstrap-sass'
 gem 'jquery-rails'
+gem 'will_paginate', '~> 3.3'
+gem 'bootstrap-will_paginate', '1.0.0'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ] # ﾃｷｽﾄと違う

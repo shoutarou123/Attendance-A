@@ -90,6 +90,8 @@ GEM
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
+    bootstrap-will_paginate (1.0.0)
+      will_paginate
     builder (3.2.4)
     capybara (3.39.2)
       addressable
@@ -300,6 +302,7 @@ GEM
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    will_paginate (3.3.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.6.12)
@@ -312,6 +315,7 @@ DEPENDENCIES
   bcrypt
   bootsnap
   bootstrap-sass
+  bootstrap-will_paginate (= 1.0.0)
   capybara (>= 3.26)
   database_cleaner
   debug
@@ -334,6 +338,7 @@ DEPENDENCIES
   tzinfo-data
   web-console
   webdrivers
+  will_paginate (~> 3.3)
 
 RUBY VERSION
    ruby 3.2.2p53
