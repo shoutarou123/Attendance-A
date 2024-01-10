@@ -13,10 +13,11 @@ gem "stimulus-rails"
 gem "jbuilder"
 gem "bootsnap", require: false
 gem "sassc-rails"
-gem 'bootstrap-sass'
+gem 'bootstrap-sass', '3.3.6'
 gem 'jquery-rails'
 gem 'will_paginate', '~> 3.3'
 gem 'bootstrap-will_paginate', '1.0.0'
+gem 'rails-i18n' # 日本語化
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ] # ﾃｷｽﾄと違う
@@ -28,7 +29,7 @@ end
 
 group :test do
   gem 'capybara', '>= 3.26'
-  gem "selenium-webdriver"
+  gem 'selenium-webdriver'
   gem 'webdrivers'
   gem 'rails-flog', require: 'flog'
   gem 'rspec-rails'

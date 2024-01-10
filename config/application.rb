@@ -11,6 +11,9 @@ module AttendanceAApp
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
     config.time_zone = 'Asia/Tokyo' # 日時アジア時間
+    config.i18n.default_locale = :ja # デフォルトの言語を日本語に設定します。
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
+    # ｶﾗﾑ名などを日本語化するため、設定が記述されたﾛｹｰﾙﾌｧｲﾙを作成するにあたり、それらのﾌｧｲﾙの内容がｱﾌﾟﾘｹｰｼｮﾝに正しく読み込まれるよう設定したもの。
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
