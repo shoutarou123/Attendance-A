@@ -3,13 +3,13 @@
   <table class="table table-bordered table-condensed user-table"> <!--borderedボーダー付き、condensed行間の狭い。-->
     <tr>
       <td rowspan="2">時間管理表</td>
-      <td>指定勤務開始時間</td>
-      <td colspan="3" rowspan="2">基本時間</td>
+      <td>指定勤務開始時間<%= format_basic_info(@user.designated_work_start_time)%></td>
+      <td colspan="3" rowspan="2">基本時間<%= format_basic_info(@user.basic_work_time)%></td>
       <td rowspan="2">初日</td>
     </tr>
 
     <tr>
-      <td>指定勤務終了時間</td>
+      <td>指定勤務終了時間<%= format_basic_info(@user.designated_work_end_time)%></td>
     </tr>
 
     <tr>
