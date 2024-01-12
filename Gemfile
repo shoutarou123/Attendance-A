@@ -18,6 +18,8 @@ gem 'jquery-rails'
 gem 'will_paginate', '~> 3.3'
 gem 'bootstrap-will_paginate', '1.0.0'
 gem 'rails-i18n' # 日本語化
+gem 'kaminari' # kaminariﾍﾟｰｼﾞﾈｰｼｮﾝ
+gem 'bootstrap4-kaminari-views' # kaminariをbootstrapにするため
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ] # ﾃｷｽﾄと違う
