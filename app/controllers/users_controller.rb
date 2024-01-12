@@ -47,8 +47,8 @@ class UsersController < ApplicationController
 
   private
 
-    def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    def user_params #StrongParametersなのでここに記述しないと更新が反映されない。
+      params.require(:user).permit(:name, :email, :affiliation, :password, :password_confirmation)
     end
 
     # beforeフィルター
