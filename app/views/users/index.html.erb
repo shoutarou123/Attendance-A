@@ -7,16 +7,31 @@
     <thead>
       <tr>
         <th><%= User.human_attribute_name :name %></th>
+        <th class="center"><%= User.human_attribute_name :affiliation %></th>
+        <% if current_user.admin? %>
+          <th class="center"><%= User.human_attribute_name :basic_work_time %></th>
+        <% end %>
       </tr>
     </thead>
 
     <% @users.each do |user| %>
       <tr>
-        <td><%= link_to user.name, user %></td> <!--勤怠画面に遷移-->
         <td>
-         <% if current_user.admin? && !current_user?(user) %> <!--!current_user?(user)は、現在のﾕｰｻﾞｰが表示されているﾍﾟｰｼﾞのﾕｰｻﾞｰ以外であること。!がないと管理者だけ削除ﾎﾞﾀﾝが表示されてしまう-->
+          <% if current_user.admin? %>
+            <%= link_to user.name, user %> <!--勤怠画面に遷移-->
+          <% else %>
+            <%= user.name %>
+          <% end %>
+        </td>
+        <td class="center"><%= user.affiliation.present? ? user.affiliation : "未所属" %></td>
+        <% if current_user.admin? %>
+          <td class="center"><%= format_basic_info(user.basic_work_time) %></td>
+        <% end %>
+        <td class="center">
+          <% if current_user.admin? && !current_user?(user) %> <!--!current_user?(user)は、現在のﾕｰｻﾞｰが表示されているﾍﾟｰｼﾞのﾕｰｻﾞｰ以外であること。!がないと管理者だけ削除ﾎﾞﾀﾝが表示されてしまう-->
+           <%= link_to "基本情報編集", edit_basic_info_user_path(user), date: { turbo_frame: 'modal' }, class: "btn btn-success" %>
            <%= link_to "削除", user, data: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-danger" %>
-         <% end %>
+          <% end %>
         </td>
       </tr>
     <% end %>

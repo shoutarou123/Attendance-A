@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy] # correct_userのbefore_actionで同じ@userが2回使用されてしまうため本ﾒｿｯﾄﾞを各ｱｸｼｮﾝに定義している
-  before_action :logged_in_user, only: [:show, :edit, :update, :destroy] # ﾛｸﾞｲﾝしていなければ詳細画面、編集画面、編集更新、削除できない
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # correct_userのbefore_actionで同じ@userが2回使用されてしまうため本ﾒｿｯﾄﾞを各ｱｸｼｮﾝに定義している
+  before_action :logged_in_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # ﾛｸﾞｲﾝしていなければ詳細画面、編集画面、編集更新、削除、基本情報編集できない
   before_action :correct_user, only: [:edit, :update] # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
-  before_action :admin_user, only: :destroy # 管理権限がないと削除できない。
+  before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info] # 管理権限がないと削除、基本情報編集できない。
 
   def index
     # @users = User.paginate(page: params[:page]) # User.allから変更。paginateではｷｰが:pageで値がﾍﾟｰｼﾞ番号のﾊｯｼｭを引数にとります。User.paginateは:pageﾊﾟﾗﾒｰﾀに基づき、ﾃﾞｰﾀﾍﾞｰｽから一塊のﾃﾞｰﾀを取得する。ﾃﾞﾌｫﾙﾄは30件。
@@ -45,6 +45,18 @@ class UsersController < ApplicationController
     redirect_to users_url # 一覧へ遷移
   end
 
+  def edit_basic_info
+    @user = User.find(params[:id])
+  
+    respond_to do |format|
+      format.html { render partial: 'users/edit_basic_info', locals: { user: @user } }
+      format.turbo_stream
+    end
+  end
+
+  def update_basic_info
+  end
+
   private
 
     def user_params #StrongParametersなのでここに記述しないと更新が反映されない。
@@ -72,5 +84,14 @@ class UsersController < ApplicationController
 
     def admin_user # ｼｽﾃﾑ管理権限所有かどうか判定します。
       redirect_to(root_url) unless current_user.admin? # 管理権限がなければﾄｯﾌﾟﾍﾟｰｼﾞに遷移
+    end
+
+    def edit_basic_info
+      @user = User.find(params[:id])
+    
+      respond_to do |format|
+        format.html { render partial: 'users/edit_basic_info', locals: { user: @user } }
+        format.turbo_stream
+      end
     end
   end
