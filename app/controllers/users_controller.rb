@@ -85,13 +85,4 @@ class UsersController < ApplicationController
     def admin_user # ｼｽﾃﾑ管理権限所有かどうか判定します。
       redirect_to(root_url) unless current_user.admin? # 管理権限がなければﾄｯﾌﾟﾍﾟｰｼﾞに遷移
     end
-
-    def edit_basic_info
-      @user = User.find(params[:id])
-    
-      respond_to do |format|
-        format.html { render partial: 'users/edit_basic_info', locals: { user: @user } }
-        format.turbo_stream
-      end
-    end
   end
