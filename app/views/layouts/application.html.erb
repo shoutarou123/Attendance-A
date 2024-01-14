@@ -9,7 +9,6 @@
   </head>
   <body> <!--本文のデザイン-->
     <%= render 'layouts/header' %>
-    <%= turbo_frame_tag 'modal' %>
     <div class="container">
       <% flash.each do |message_type, msg| %>
         <div class="alert alert-<%= message_type %>"><%= msg %></div>
