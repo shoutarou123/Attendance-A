@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.2.2" # ﾃｷｽﾄと違うver.
+ruby "3.0.6"
 gem "rails", "~> 7.1.2" # ﾃｷｽﾄと違うver.
 gem 'bcrypt' # has_secure_passwordを使って、ﾊﾟｽﾜｰﾄﾞをﾊｯｼｭ化するため必要
 gem 'faker'
@@ -11,6 +11,7 @@ gem "importmap-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
 gem "jbuilder"
+gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
 gem "bootsnap", require: false
 gem "sassc-rails"
 gem 'bootstrap-sass', '3.3.6'
@@ -22,7 +23,7 @@ gem 'kaminari' # kaminariﾍﾟｰｼﾞﾈｰｼｮﾝ
 gem 'bootstrap4-kaminari-views' # kaminariをbootstrapにするため
 
 group :development, :test do
-  gem "debug", platforms: %i[ mri windows ] # ﾃｷｽﾄと違う
+  gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]
 end
 
 group :development do
@@ -41,4 +42,4 @@ group :test do
   gem 'rails-controller-testing'
 end
 
-gem "tzinfo-data", platforms: %i[ windows jruby ] # テキストと違う
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
