@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-
+  has_many :attendances, dependent: :destroy # 1対多 多数のため複数形 userが親 attendancesが子
+                                             # userが削除されたら紐づけられたattendanceも一緒に削除される
   attr_accessor :remember_token # remember_tokenという仮想の属性を作成する。
   before_save { self.email = email.downcase } # email小文字化
 
