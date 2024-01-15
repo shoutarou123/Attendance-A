@@ -348,7 +348,7 @@ DEPENDENCIES
   jquery-rails
   kaminari
   puma (>= 5.0)
-  rails (~> 7.1.0)
+  rails (~> 7.1.2)
   rails-controller-testing
   rails-flog
   rails-i18n
