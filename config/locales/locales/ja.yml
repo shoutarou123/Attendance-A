@@ -205,6 +205,8 @@ ja:
       long: "%Y/%m/%d %H:%M"
       short: "%m/%d %H:%M"
       time: "%H：%M"
+      timeH: "%H" # 追加
+      timeM: "%M" # 追加
     pm: 午後
   views: # kaminari日本語化
     pagination:

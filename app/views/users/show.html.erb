@@ -88,8 +88,8 @@
           <td class="<%= class_for_day %>"> <!--上記で曜日指定し、代入したものをここで記述している。更に色指定をCSSで行う。-->
             <%= $days_of_the_week[day.worked_on.wday] %>
           </td>
-          <td></td> <!--時-->
-          <td></td> <!--分-->
+          <td><%= l(day.started_at, format: :timeH) if day.started_at.present? %></td> <!--時-->
+          <td><%= l(day.started_at, format: :timeM) if day.started_at.present? %></td> <!--分-->
           <td>
             <% if (Date.current == day.worked_on) && day.started_at.nil? %> <!--繰り返し処理中の日付と実際の日付が一致すること。かつ出社が無い時-->
               <%= link_to "出社", user_attendance_path(@user, day), data: { turbo_method: :patch }, class: "btn btn-primary btn-attendance" %>
