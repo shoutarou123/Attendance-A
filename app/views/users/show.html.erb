@@ -98,7 +98,11 @@
           <td><%= l(day.finished_at, format: :timeH) if day.finished_at.present? %></td> <!--時-->
           <td><%= l(day.finished_at, format: :timeM) if day.finished_at.present? %></td> <!--分-->
           <td></td>
-          <td></td>
+          <td> <!--在社時間 attendance_helper参照-->
+            <% if day.started_at.present? && day.finished_at.present? %> <!--出社も退社も存在する時-->
+              <%= working_times(day.started_at, day.finished_at) %>
+            <% end %>
+          </td>
           <td></td>
           <td></td>
           <td></td>
