@@ -2,7 +2,7 @@ module UsersHelper
 
   # 勤怠基本情報を指定のﾌｫｰﾏｯﾄで返します。  
   def format_basic_info(time) # 基本時間、指定勤務開始時間、指定勤務終了時間のﾌｫｰﾏｯﾄ時間の指定(basic_infoとなっているから)
-    format("%.2f", ((time.hour * 60) + time.min) / 60.0)
+    format("%02d:%02d", time.hour, time.min) # 表記 format("%.2f", ((time.hour * 60) + time.min) / 60.0) から変更
   end
 end
 # %は数値によって変化し、.2fは値がない場合は.00、値がある場合はそのまま、小数点第三位以上まである場合は第二位まで表示しそれ以降は切り捨てます
