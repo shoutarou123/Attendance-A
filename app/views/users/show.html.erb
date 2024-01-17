@@ -2,7 +2,11 @@
 <div>
   <table class="table table-bordered table-condensed user-table"> <!--borderedボーダー付き、condensed行間の狭い。-->
     <tr>
-      <td rowspan="2">時間管理表</td>
+      <td rowspan="2">
+        <%= link_to "←", user_path(date: @first_day.prev_month), class:"btn btn-primary" %>
+          時間管理表
+        <%= link_to "→", user_path(date: @first_day.next_month), class: "btn btn-primary" %>
+      </td>
       <td>指定勤務開始時間<%= format_basic_info(@user.designated_work_start_time)%></td>
       <td colspan="3" rowspan="2">基本時間<%= format_basic_info(@user.basic_work_time)%></td>
       <td rowspan="2">初日：<%= l(@first_day, format: :short) %></td>
