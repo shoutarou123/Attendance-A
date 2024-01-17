@@ -5,6 +5,28 @@
   text-align: center;
 }
 
+/* ユーザー勤怠情報テーブル */
+
+#table-attendances {
+  th {
+    vertical-align: middle;
+    text-align: center;
+  }
+  td {
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+
+/*曜日の色指定*/
+.text-primary {
+  color: blue;
+}
+
+.text-danger {
+  color: red;
+}
+
 /* 入力フォーム */
 
 .label-signup {
