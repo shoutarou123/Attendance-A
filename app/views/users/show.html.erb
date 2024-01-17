@@ -91,12 +91,12 @@
           <td><%= l(day.started_at, format: :timeH) if day.started_at.present? %></td> <!--時-->
           <td><%= l(day.started_at, format: :timeM) if day.started_at.present? %></td> <!--分-->
           <td>
-            <% if (Date.current == day.worked_on) && day.started_at.nil? %> <!--繰り返し処理中の日付と実際の日付が一致すること。かつ出社が無い時-->
-              <%= link_to "出社", user_attendance_path(@user, day), data: { turbo_method: :patch }, class: "btn btn-primary btn-attendance" %>
+            <% if btn_text = attendance_state(day) %> <!--attendance_helper参照-->
+              <%= link_to "#{btn_text}", user_attendance_path(@user, day), data: { turbo_method: :patch }, class: "btn btn-primary btn-attendance "%>
             <% end %>
           </td>
-          <td></td>
-          <td></td>
+          <td><%= l(day.finished_at, format: :timeH) if day.finished_at.present? %></td> <!--時-->
+          <td><%= l(day.finished_at, format: :timeM) if day.finished_at.present? %></td> <!--分-->
           <td></td>
           <td></td>
           <td></td>
