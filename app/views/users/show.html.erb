@@ -5,7 +5,7 @@
       <td rowspan="2">時間管理表</td>
       <td>指定勤務開始時間<%= format_basic_info(@user.designated_work_start_time)%></td>
       <td colspan="3" rowspan="2">基本時間<%= format_basic_info(@user.basic_work_time)%></td>
-      <td rowspan="2">初日</td>
+      <td rowspan="2">初日：<%= l(@first_day, format: :short) %></td>
     </tr>
 
     <tr>
@@ -18,7 +18,7 @@
       <td>コード</td>
       <td></td>
       <td>出勤日数</td>
-      <td>締め</td>
+      <td>締め：<%= l(@last_day, format: :short) %></td>
     </tr>
   </table>
 </div>
