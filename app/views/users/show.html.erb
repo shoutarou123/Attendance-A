@@ -4,7 +4,7 @@
     <tr>
       <td rowspan="2">
         <%= link_to "←", user_path(date: @first_day.prev_month), class:"btn btn-primary" %>
-          時間管理表
+          <%= l(@first_day,format: :middle) %> 時間管理表
         <%= link_to "→", user_path(date: @first_day.next_month), class: "btn btn-primary" %>
       </td>
       <td>指定勤務開始時間<%= format_basic_info(@user.designated_work_start_time)%></td>

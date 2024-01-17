@@ -9,6 +9,12 @@ class AttendancesController < ApplicationController
      else
       flash[:danger] = "出社時間登録に失敗しました。やり直してください。"
      end
+    elsif @attendance.finished_at.nil?
+      if @attendance.update(finished_at: Time.current.change(sec: 0))
+        flash[:info] = "退社時間を登録しました。"
+      else
+        flash[:danger] = "退社時間登録に失敗しました。やり直してください。"
+      end
     end
     redirect_to @user
   end
