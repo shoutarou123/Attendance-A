@@ -74,11 +74,11 @@
     </thead>
 
     <tbody>
-      <% (@first_day..@last_day).each do |day| %>
+      <% @attendances.each do |day| %>
         <tr>
           <td><%= link_to "残業申請", '#', class: "btn btn-primary" %></td>
-          <td><%= l(day, format: :short) %></td>
-              <% class_for_day = case $days_of_the_week[day.wday]
+         <td><%= l(day.worked_on, format: :short) %></td>
+              <% class_for_day = case $days_of_the_week[day.worked_on.wday]
                 when '土'
                      'text-primary'
                 when '日'
@@ -86,11 +86,15 @@
                 end
               %>
           <td class="<%= class_for_day %>"> <!--上記で曜日指定し、代入したものをここで記述している。更に色指定をCSSで行う。-->
-            <%= $days_of_the_week[day.wday] %>
+            <%= $days_of_the_week[day.worked_on.wday] %>
           </td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td></td> <!--時-->
+          <td></td> <!--分-->
+          <td>
+            <% if (Date.current == day.worked_on) && day.started_at.nil? %> <!--繰り返し処理中の日付と実際の日付が一致すること。かつ出社が無い時-->
+              <%= link_to "出社", user_attendance_path(@user, day), data: { turbo_method: :patch }, class: "btn btn-primary btn-attendance" %>
+            <% end %>
+          </td>
           <td></td>
           <td></td>
           <td></td>
