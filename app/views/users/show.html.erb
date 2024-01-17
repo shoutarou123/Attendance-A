@@ -112,5 +112,20 @@
         </tr>
       <% end %>
     </tbody>
+
+    <tfoot>
+      <!--rowspan:縦結合、colspan：横結合-->
+      <tr>
+        <td colspan="3">累計日数</td>
+        <td colspan="6">基本勤務時間</td>
+        <td colspan="2">累計在社時間</td>
+        <td colspan="5" rowspan="2"></td>
+      </tr>
+      <tr>
+        <td colspan="3"><%= @attendances.count %></td>
+        <td colspan="6"><%= total_basic_work_time %></td>
+        <td colspan="2"></td>
+      </tr>
+    </tfoot>
   </table>
 </div>
