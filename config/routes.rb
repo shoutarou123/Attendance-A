@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       get 'edit_basic_info' # 勤務時間変更ﾍﾟｰｼﾞ
       patch 'update_basic_info' # 勤務時間変更機能
       get 'attendances/edit_one_month' # 勤怠ﾍﾟｰｼﾞ
+      patch 'attendances/update_one_month' # 勤怠編集更新機能
     end
     resources :attendances, only: :update # updateｱｸｼｮﾝのみで良いためこの記述。
   end

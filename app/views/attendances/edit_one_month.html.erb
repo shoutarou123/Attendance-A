@@ -1,45 +1,58 @@
 <% provide(:title, @user.name) %>
-<div>
-  <h1>勤怠編集画面</h1>
-  <table class="table table-bordered table-condensed table-hover" id="table-attendances">
-    <thead>
-      <tr>
-        <th>日付</th>
-        <th>曜日</th>
-        <th>出社</th>
-        <th>退社</th>
-        <th>翌日</th>
-        <th>在社時間</th>
-        <th>備考</th>
-        <th>支持者確認㊞</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @attendances.each do |day| %>
-        <tr>
-          <td><%= l(day.worked_on, format: :short) %></td>
-          <% class_for_day = case $days_of_the_week[day.worked_on.wday]
-                when '土'
-                     'text-primary'
-                when '日'
-                     'text-danger'
-                end
-              %>
-          <td class="<%= class_for_day %>"> <!--上記で曜日指定し、代入したものをここで記述している。更に色指定をCSSで行う。-->
-            <%= $days_of_the_week[day.worked_on.wday] %>
-          </td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+<%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
+  <div>
+    <h1>勤怠編集画面</h1>
+      <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+        <thead>
+          <tr>
+            <th>日付</th>
+            <th>曜日</th>
+            <th>出社</th>
+            <th>退社</th>
+            <th>翌日</th>
+            <th>在社時間</th>
+            <th>備考</th>
+            <th>支持者確認㊞</th>
+          </tr>
+        </thead>
 
-<div class="center">
-  <%= link_to "キャンセル", user_path(date: @first_day), class: "btn btn-lg btn-default" %>
-</div>
+        <tbody>
+          <% @attendances.each do |day| %>
+            <%= f.fields_for "attendances[]", day do |attendance| %> <!--各ﾌｫｰﾑのinputﾀｸﾞのname属性にattendances[id][ｶﾗﾑ名]という形式で展開されるようになる-->
+              <tr>                                                  <!--dayは繰り返し処理されている@attendancesからなる1つのAttendanceｵﾌﾞｼﾞｪｸﾄを指す-->
+                <td><%= l(day.worked_on, format: :short) %></td>
+                  <% class_for_day = case $days_of_the_week[day.worked_on.wday]
+                    when '土'
+                        'text-primary'
+                    when '日'
+                        'text-danger'
+                    end
+                  %>
+                <td class="<%= class_for_day %>"> <!--上記で曜日指定し、代入したものをここで記述している。更に色指定をCSSで行う。-->
+                  <%= $days_of_the_week[day.worked_on.wday] %>
+                </td>
+                <td><%= attendance.time_field :started_at, class: "form-control" %></td> <!--出社-->
+                <td><%= attendance.time_field :finished_at, class: "form-control" %></td> <!--退社-->
+                <td></td> <!--翌日-->
+                <td> <!--在社時間 attendance_helper参照-->
+                  <% if day.started_at.present? && day.finished_at.present? %> <!--出社も退社も存在する時-->
+                    <%= working_times(day.started_at, day.finished_at) %>
+                    <% working_time_seconds = (day.finished_at - day.started_at).to_i %>
+                    <% @total_working_seconds ||= 0 %> <!-- @total_working_secondsがnilの場合、0で初期化 -->
+                    <% @total_working_seconds += working_time_seconds %>
+                  <% end %>
+                </td>
+                <td><%= attendance.text_field :note, class: "form-control" %></td> <!--備考-->
+                <td></td> <!--支持者確認㊞-->
+              </tr>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+
+  <div class="center">
+    <%= f.submit "まとめて更新", class: "btn btn-lg btn-primary" %>
+    <%= link_to "キャンセル", user_path(date: @first_day), class: "btn btn-lg btn-default" %>
+  </div>
+<% end %>
