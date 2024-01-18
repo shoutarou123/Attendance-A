@@ -31,8 +31,13 @@
                 <td class="<%= class_for_day %>"> <!--上記で曜日指定し、代入したものをここで記述している。更に色指定をCSSで行う。-->
                   <%= $days_of_the_week[day.worked_on.wday] %>
                 </td>
-                <td><%= attendance.time_field :started_at, class: "form-control" %></td> <!--出社-->
-                <td><%= attendance.time_field :finished_at, class: "form-control" %></td> <!--退社-->
+                <% if Date.current < day.worked_on %> <!--現在より未来は-->
+                  <td><%= attendance.time_field :started_at, readonly: true, class: "form-control" %></td> <!--出社 読み取り専用-->
+                  <td><%= attendance.time_field :finished_at, readonly: true, class: "form-control" %></td> <!--退社-->
+                <% else %> <!--現在より未来以外は-->
+                  <td><%= attendance.time_field :started_at, class: "form-control" %></td>
+                  <td><%= attendance.time_field :finished_at, class: "form-control" %></td>
+                <% end %>
                 <td></td> <!--翌日-->
                 <td> <!--在社時間 attendance_helper参照-->
                   <% if day.started_at.present? && day.finished_at.present? %> <!--出社も退社も存在する時-->
