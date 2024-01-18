@@ -122,11 +122,13 @@
         <td colspan="2">累計在社時間</td>
         <td colspan="5" rowspan="2"></td>
       </tr>
+
       <tr>
         <td colspan="3"><%= @attendances.count %></td> <!--累計日数表示-->
         <td colspan="6"><%= format_basic_info(@user.basic_work_time).to_f * @worked_sum %></td> <!--累計基本勤務時間表示 attendance_helper参照-->
         <td colspan="2"><%= format("%.2f", @total_working_times.to_f) %></td> <!--累計在社時間表示-->
       </tr>
+
     </tfoot>
   </table>
 </div>
