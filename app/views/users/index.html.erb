@@ -1,39 +1,15 @@
 <% provide(:title, 'All Users') %>
 <h1>ユーザー一覧</h1>
 
-<div class="col-md-10 col-md-offset-1">
   <%= paginate @users, theme: 'twitter-bootstrap-4' %> <!--will pegenateからkaminariに変更-->
-  <table class="table table-condensed table-hover" id="table-users">
-    <thead>
-      <tr>
-        <th><%= User.human_attribute_name :name %></th>
-        <th class="center"><%= User.human_attribute_name :affiliation %></th>
-        <% if current_user.admin? %>
-          <th class="center"><%= User.human_attribute_name :basic_work_time %></th>
-        <% end %>
-      </tr>
-    </thead>
 
     <% @users.each do |user| %>
-      <tr>
-        <td>
-          <% if current_user.admin? %>
-            <%= link_to user.name, user %> <!--勤怠画面に遷移-->
-          <% else %>
-            <%= user.name %>
-          <% end %>
-        </td>
-        <td class="center"><%= user.affiliation.present? ? user.affiliation : "未所属" %></td>
-        <% if current_user.admin? %>
-          <td class="center"><%= format_basic_info(user.basic_work_time) %></td>
-        <% end %>
-        <td class="center">
-          <% if current_user.admin? && !current_user?(user) %> <!--!current_user?(user)は、現在のﾕｰｻﾞｰが表示されているﾍﾟｰｼﾞのﾕｰｻﾞｰ以外であること。!がないと管理者だけ削除ﾎﾞﾀﾝが表示されてしまう-->
-           <%= link_to "削除", user, data: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-danger" %>
-          <% end %>
-        </td>
-      </tr>
+    <div><%= user.name %></div> <!--名前表示 勤怠画面に遷移-->
+    <div> 
+      <% if current_user.admin? && !current_user?(user) %> <!--!current_user?(user)は、現在のﾕｰｻﾞｰが表示されているﾍﾟｰｼﾞのﾕｰｻﾞｰ以外であること。!がないと管理者だけ削除ﾎﾞﾀﾝが表示されてしまう-->
+        <%= link_to "削除", user, data: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
+        <%= link_to "編集", '#', class: "btn btn-primary" %>
+      <% end %>
+    </div>
     <% end %>
-  </table>
   <%= paginate @users, theme: 'twitter-bootstrap-4' %>
-</div>
