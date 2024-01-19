@@ -10,6 +10,15 @@ class UsersController < ApplicationController
     @users = User.page(params[:page]).per(30) # kaminariでのpeginateに変更
   end
 
+  def working
+    @user = User.find(params[:id])
+    attendance = @user.attendances.find_by(worked_on: Date.current)
+
+    if attendance.present? && attendance.started_at.present? && attendance.finished_at.blank?
+      @user_info = { name: @user.name, employee_number: @user.employee_number }
+    end
+  end
+
   def show
     @worked_sum = @attendances.where.not(started_at: nil).count # 出社が何も無いじゃない数
     # @first_day = Date.current.beginning_of_month # 現在日付の月初

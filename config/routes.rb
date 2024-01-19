@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   
   resources :users do
     member do
+      get 'working' # 出勤中ﾍﾟｰｼﾞ
       get 'edit_basic_info' # 勤務時間変更ﾍﾟｰｼﾞ
       patch 'update_basic_info' # 勤務時間変更機能
       get 'attendances/edit_one_month' # 勤怠ﾍﾟｰｼﾞ

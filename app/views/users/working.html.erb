@@ -1,0 +1,29 @@
+<% provide(:title, 'working') %>
+<h1>出勤中社員一覧</h1>
+
+<div class="col-md-10 col-md-offset-1">
+   <table class="table table-condensed table-hover" id="table-users">
+     <thead>
+      <tr>
+        <th><%= User.human_attribute_name :employee_number %></th> <!--社員番号-->
+        <th><%= User.human_attribute_name :name %></th> <!--名前-->
+      </tr>
+    </thead>
+
+    <tbody>
+      <% if @user_info.present? %>
+        <tr>
+          <td>
+            <%= @user_info[:employee_number].present? ? @user_info[:employee_number] : '' %>
+            <%= @user_info[:name] %>
+          </td>
+        </tr>
+      <% else %>
+        <tr>
+          <td colspan="2">出勤中の社員はいません。</td>
+        </tr>
+      <% end %>
+    </tbody>
+   </table>
+</div>
+
