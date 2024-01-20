@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # correct_userのbefore_actionで同じ@userが2回使用されてしまうため本ﾒｿｯﾄﾞを各ｱｸｼｮﾝに定義している
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # ﾛｸﾞｲﾝしていなければ一覧画面、編集画面、編集更新、削除、基本情報編集できない
+  before_action :logged_in_user, only: [:index, :working, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # ﾛｸﾞｲﾝしていなければ一覧画面、出勤中一覧画面、編集画面、編集更新、削除、基本情報編集できない
   before_action :correct_user, only: [:edit, :update] # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
   before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info] # 管理権限がないと削除、基本情報編集できない。
   before_action :set_one_month, only: :show # ﾍﾟｰｼﾞ出力前に1ヶ月分のﾃﾞｰﾀの存在を確認・ｾｯﾄ showｱｸｼｮﾝ実行前に発動
@@ -11,12 +11,14 @@ class UsersController < ApplicationController
   end
 
   def working
-    @user = User.find(params[:id])
-    attendance = @user.attendances.find_by(worked_on: Date.current)
-
-    if attendance.present? && attendance.started_at.present? && attendance.finished_at.blank?
-      @user_info = { name: @user.name, employee_number: @user.employee_number }
-    end
+    @user_info_list = [] # @user_info_listの初期化。空のスペースを作成しその後代入できるようにしている。
+      User.all.each do |user|
+        attendance = user.attendances.find_by(worked_on: Date.current) # ユーザーの特定の日の出勤データを取得
+          if attendance.present? && attendance.started_at.present? && attendance.finished_at.blank?  # started_at が存在し、finished_at が存在しないデータだけを取得
+            user_info = { name: user.name, employee_number: user.employee_number }
+            @user_info_list << user_info # user_infoを初期化した@user_info_listに代入しviewsで使用できるようにしている。
+          end
+      end
   end
 
   def show

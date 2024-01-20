@@ -11,19 +11,24 @@
     </thead>
 
     <tbody>
-      <% if @user_info.present? %>
-        <tr>
-          <td>
-            <%= @user_info[:employee_number].present? ? @user_info[:employee_number] : '' %>
-            <%= @user_info[:name] %>
-          </td>
-        </tr>
+      <% if @user_info_list.present? %> <!---->
+        <% @user_info_list.each do |user_info| %>
+          <tr>
+            <td>
+              <% if user_info[:employee_number].present? %> <!--この定義でemployee_numberが空ならそのまま表示することになる-->
+                <%= user_info[:employee_number] %> <!--社員番号表示-->
+              <% end %>
+            </td>
+            <td><%= user_info[:name] %></td> <!--名前表示-->
+          </tr>
+        <% end %>
       <% else %>
         <tr>
           <td colspan="2">出勤中の社員はいません。</td>
         </tr>
       <% end %>
     </tbody>
+
    </table>
 </div>
 
