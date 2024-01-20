@@ -1,15 +1,28 @@
 <% provide(:title, 'All Users') %>
 <h1>ユーザー一覧</h1>
 
+<div class="col-md-10 col-md-offset-1">
   <%= paginate @users, theme: 'twitter-bootstrap-4' %> <!--will pegenateからkaminariに変更-->
-
-    <% @users.each do |user| %>
-    <div><%= user.name %></div> <!--名前表示 勤怠画面に遷移-->
-    <div> 
-      <% if current_user.admin? && !current_user?(user) %> <!--!current_user?(user)は、現在のﾕｰｻﾞｰが表示されているﾍﾟｰｼﾞのﾕｰｻﾞｰ以外であること。!がないと管理者だけ削除ﾎﾞﾀﾝが表示されてしまう-->
-        <%= link_to "削除", user, data: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
-        <%= link_to "編集", '#', class: "btn btn-primary" %>
-      <% end %>
+  
+    <div class="input-group">
+    <span class="input-group-btn">
+    <button id="selectFile" class="btn btn-default" type="button">ファイル選択</button>
+    </span>
+    <input type="text" class="form-control" >
     </div>
-    <% end %>
+    <span><%= link_to "CSVをインポート", '#', class: "btn btn-primary" %></span>
+    
+
+    <table class="table table-borderless" id="table-users">
+      <% @users.each do |user| %>
+        <tr>
+          <th><%= user.name %></th> <!--名前表示 勤怠画面に遷移-->
+            <% if current_user.admin? && !current_user?(user) %> <!--!current_user?(user)は、現在のﾕｰｻﾞｰが表示されているﾍﾟｰｼﾞのﾕｰｻﾞｰ以外であること。!がないと管理者だけ削除ﾎﾞﾀﾝが表示されてしまう-->
+              <tr><th><%= link_to "削除", user, data: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></th></tr>
+              <tr><th><%= link_to "編集", '#', class: "btn btn-lg btn-primary" %></th></tr>
+            <% end %>
+        </tr>
+      <% end %>
+    </table>
   <%= paginate @users, theme: 'twitter-bootstrap-4' %>
+</div>

@@ -11,7 +11,7 @@ class UsersController < ApplicationController
   end
 
   def working
-    @user_info_list = [] # @user_info_listの初期化。空のスペースを作成しその後代入できるようにしている。
+    @user_info_list = [] # @user_info_listの初期化。空のスペースを作成しその後代入できるようにしている。user.all定義し条件該当ﾃﾞｰﾀだけ取得すると最後に該当したものだけ取得することになってしまう。
       User.all.each do |user|
         attendance = user.attendances.find_by(worked_on: Date.current) # ユーザーの特定の日の出勤データを取得
           if attendance.present? && attendance.started_at.present? && attendance.finished_at.blank?  # started_at が存在し、finished_at が存在しないデータだけを取得
