@@ -24,9 +24,9 @@
         <%= link_to "削除", user, data: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
       </div>
       <div class="col">
-        <button class="btn btn-primary flex-fill" type="button" data-toggle="collapse" data-target="#user-edit-<%= user.id %>">編集</button>
-          <div id="user-edit-<%= user.id %>" class="collapse user-edit-form">
-            <%= render 'form' %>
+        <button type="button" data-toggle="collapse" href="#collapse3" class="btn btn-primary">編集</button>
+          <div id="collapse3" class="panel-collapse collapse">
+            <div class="panel-body"><%= render 'form', user: user %></div>
           </div>
       </div>
     <% end %>
