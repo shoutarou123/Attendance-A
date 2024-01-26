@@ -21,6 +21,7 @@ gem 'bootstrap-will_paginate', '1.0.0'
 gem 'rails-i18n' # 日本語化
 gem 'kaminari' # kaminariﾍﾟｰｼﾞﾈｰｼｮﾝ
 gem 'bootstrap4-kaminari-views' # kaminariをbootstrapにするため
+gem 'roo' # CSVﾌｧｲﾙを読み込むためのもの
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]

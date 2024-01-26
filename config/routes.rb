@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   delete '/logout', to: 'sessions#destroy'
   
   resources :users do
+    collection {post :import} # CSVｲﾝﾎﾟｰﾄ用
     member do
       get 'working' # 出勤中ﾍﾟｰｼﾞ
       get 'edit_basic_info' # 勤務時間変更ﾍﾟｰｼﾞ

@@ -5,15 +5,16 @@
 
 <%= paginate @users, theme: 'twitter-bootstrap-4' %> <!--will pegenateからkaminariに変更-->
 
-<div class="input-group">
-  <span class="input-group-btn">
-  </span>
-    <input type="file" name="file" id="file">
-</div>
-
-  <div class="input-group-btn">
-    <%= link_to "CSVをインポート", '#', class: "btn btn-primary" %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <%= form_with url: import_users_path(format: :csv), local: true, multipart: true do |f| %> <!--multipart trueにしないと適切に送信できない-->
+        <%= file_field :file, accept: '.csv', class: "btn btn-default" %> <!--csv形式ﾌｧｲﾙだけ選択できるように制限-->
+        <%= f.submit "CSVをインポート", class: "btn btn-md btn-primary" %>
+      <% end %>
+    </div>
   </div>
+</div>
 
 <% @users.each do |user| %>
   <div class="container">

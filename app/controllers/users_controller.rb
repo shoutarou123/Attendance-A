@@ -10,6 +10,17 @@ class UsersController < ApplicationController
     @users = User.page(params[:page]).per(30) # kaminariでのpeginateに変更
   end
 
+  def import
+    if params[:file].present? && File.extname(params[:file].original_filename) == ".csv" # ﾌｧｲﾙが存在すること。かつｱｯﾌﾟﾛｰﾄﾞされたﾌｧｲﾙ名の拡張子が.csvである時
+      flash[:success] = "CSVファイルを読み込みました。"
+      User.import(params[:file])
+      redirect_to users_url # ﾕｰｻﾞｰ一覧へ遷移
+    else
+      flash[:danger] = "CSVファイルを選択してください。"
+      redirect_to users_url # ﾕｰｻﾞｰ一覧へ遷移
+    end
+  end
+
   def working
     @user_info_list = [] # @user_info_listの初期化。空のスペースを作成しその後代入できるようにしている。user.all定義し条件該当ﾃﾞｰﾀだけ取得すると最後に該当したものだけ取得することになってしまう。
       User.all.each do |user|
