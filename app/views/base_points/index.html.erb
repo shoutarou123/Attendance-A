@@ -1,0 +1,25 @@
+<% provide(:title, 'base_index') %>
+
+<h1>拠点一覧</h1>
+
+<div>
+  <table class="table table-bordered table-condensed user-table">
+    <tr>
+      <td></td>
+      <td></td>
+      <td>拠点番号</td>
+      <td>拠点名</td>
+      <td>勤怠種類</td>
+    </tr>
+
+    <% @base_points.each do |base_point| %>
+      <tr>
+        <td></td>
+        <td></td>
+        <td><%= base_point.number %></td>
+        <td><%= base_point.name %></td>
+        <td><%= base_point.attendance_type %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>

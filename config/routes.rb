@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get 'base_points/index'
+  get 'base_points/new'
   
   root 'static_pages#top' # get不要 static_paagesｺﾝﾄﾛｰﾗｰ topｱｸｼｮﾝ /でﾄｯﾌﾟﾍﾟｰｼﾞに遷移するようになる
   get '/signup', to: 'users#new'
@@ -19,4 +21,5 @@ Rails.application.routes.draw do
     end
     resources :attendances, only: :update # updateｱｸｼｮﾝのみで良いためこの記述。
   end
+    resources :base_points
 end
