@@ -12,11 +12,11 @@ class UsersController < ApplicationController
 
   def import
     if params[:file].present? && File.extname(params[:file].original_filename) == ".csv" # ﾌｧｲﾙが存在すること。かつｱｯﾌﾟﾛｰﾄﾞされたﾌｧｲﾙ名の拡張子が.csvである時
-      flash[:success] = "CSVファイルを読み込みました。"
+      flash[:success] = 'CSVファイルを読み込みました。'
       User.import(params[:file])
       redirect_to users_url # ﾕｰｻﾞｰ一覧へ遷移
     else
-      flash[:danger] = "CSVファイルを選択してください。"
+      flash[:danger] = 'CSVファイルを選択してください。'
       redirect_to users_url # ﾕｰｻﾞｰ一覧へ遷移
     end
   end

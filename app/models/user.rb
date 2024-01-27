@@ -49,4 +49,16 @@ class User < ApplicationRecord
   def forget # ﾕｰｻﾞｰのﾛｸﾞｲﾝ情報を破棄します。
     update_attribute(:remember_digest, nil) # attribute(属性)
   end
+
+  def self.import(file)
+    CSV.foreach(file.path, headers: true, encoding: 'Shift_JIS:UTF-8') do |row| # CSV.foreach CSVﾌｧｲﾙを一行ずつ処理するﾒｿｯﾄﾞ fileはﾌｧｲﾙｵﾌﾞｼﾞｪｸﾄ,pathでそのﾊﾟｽを取得 CSVﾌｧｲﾙの最初の行がﾍｯﾀﾞｰ情報を含んでいるか指定。trueの場合ﾍｯﾀﾞｰ行は処理対象から除外。ｴﾝｺｰﾃﾞｨﾝｸﾞをUTF-8に変換。
+      user = find_by(name: row["name"]) || new # 名前が見つかればﾚｺｰﾄﾞを呼び出し見つかれなければ新しく作成
+      user.attributes = row.to_hash.slice(*updatable_attributes)
+      user.save
+    end
+  end
+
+  def self.updatable_attributes # 更新を許可するｶﾗﾑを定義
+    ["name", "email", "affiliation", "employee_number", "uid", "password", "password_confirmation", "basic_work_time", "designated_work_start_time", "designated_work_end_time", "superior", "admin"]
+  end
 end
