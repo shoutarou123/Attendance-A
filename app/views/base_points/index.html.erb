@@ -12,13 +12,13 @@
       <td>勤怠種類</td>
     </tr>
 
-    <% @base_points.each do |base| %>
+    <% @base_points.each do |base_point| %>
       <tr>
-        <td><%= link_to "修正", edit_base_point_path(base), class: "btn btn-primary" %></td>
-        <td><%= link_to "削除", base_point_path, date: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
-        <td><%= base.number %></td>
-        <td><%= base.name %></td>
-        <td><%= base.attendance_type %></td>
+        <td><%= link_to "修正", edit_base_point_path(base_point), class: "btn btn-primary" %></td>
+        <td><%= link_to "削除", base_point, date: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
+        <td><%= base_point.number %></td>
+        <td><%= base_point.name %></td>
+        <td><%= base_point.attendance_type %></td>
       </tr>
     <% end %>
   </table>

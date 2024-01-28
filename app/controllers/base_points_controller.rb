@@ -27,4 +27,11 @@ class BasePointsController < ApplicationController
     flash[:success] = "#{@base_point.name}のデータを削除しました。"
     redirect_to base_points_url # 一覧へ遷移
   end
+
+  private
+
+    def base_params #StrongParametersなのでここに記述しないと更新が反映されない。
+      params.require(:base_point).permit(:number, :name, :attendance_type)
+    end
+
 end
