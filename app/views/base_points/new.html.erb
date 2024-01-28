@@ -1,2 +1,21 @@
-<h1>BasePoints#new</h1>
-<p>Find me in app/views/base_points/new.html.erb</p>
+<% provide(:title, 'base_new') %>
+
+<h1>拠点情報追加</h1>
+
+<div>
+  <table class="table table-bordered table-condensed user-table">
+
+    <%= form_with(model: @base_point, local: true) do |f| %>
+     <%= f.label :number %>
+     <%= f.text_field :number, class: "form-control" %>
+
+     <%= f.label :name %>
+     <%= f.text_field :name, class: "form-control" %>
+
+     <%= f.label :attendance_type %>
+     <%= f.text_field :attendance_type, class: "form-control" %>
+
+     <%= f.submit "新規作成", class: "btn btn-primary" %>
+    <% end %>
+  </table>
+</div>

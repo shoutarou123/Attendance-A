@@ -7,4 +7,24 @@ class BasePointsController < ApplicationController
   def new
     @base_point = BasePoint.new
   end
+
+  def create
+    @base_point = BasePoint.new(base_params)
+    if @base_point.save # 保存成功
+      flash[:success] = '拠点新規作成に成功しました。'
+      redirect_to base_points_url # 一覧へ遷移
+    else
+      render 'new', status: :unprocessable_entity
+    end
+  end
+
+  def edit
+  end
+
+  def destroy
+    @base_point = BasePoint.find(params[:id])
+    @base_point.destroy
+    flash[:success] = "#{@base_point.name}のデータを削除しました。"
+    redirect_to base_points_url # 一覧へ遷移
+  end
 end
