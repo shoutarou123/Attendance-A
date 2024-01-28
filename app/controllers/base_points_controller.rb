@@ -19,6 +19,17 @@ class BasePointsController < ApplicationController
   end
 
   def edit
+    @base_point = BasePoint.find(params[:id])
+  end
+
+  def update
+    @base_point = BasePoint.find(params[:id])
+    if @base_point.update(base_params)
+      flash[:success] = "拠点情報を更新しました。"
+      redirect_to base_points_url(@base_point)
+    else
+      render 'edit', status: :unprocessable_entity
+    end
   end
 
   def destroy
