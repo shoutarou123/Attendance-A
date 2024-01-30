@@ -14,7 +14,7 @@
 
     <% @base_points.each do |base_point| %>
       <tr>
-        <td><%= link_to "修正", edit_base_point_path(base_point), class: "btn btn-primary" %></td>
+        <td><%= link_to "修正", edit_base_point_path(base_point.id), class: "btn btn-primary" %></td>
         <td><%= link_to "削除", base_point, date: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
         <td><%= base_point.number %></td>
         <td><%= base_point.name %></td>

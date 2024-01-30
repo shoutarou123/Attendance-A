@@ -26,14 +26,14 @@ class BasePointsController < ApplicationController
     @base_point = BasePoint.find(params[:id])
     if @base_point.update(base_params)
       flash[:success] = "拠点情報を更新しました。"
-      redirect_to base_points_url(@base_point)
+      redirect_to base_points_urlS
     else
       render 'edit', status: :unprocessable_entity
     end
   end
 
   def destroy
-    @base_point = BasePoint.find(params[:id])
+    @base_point = BasePoSint.find(params[:id])
     @base_point.destroy
     flash[:success] = "#{@base_point.name}のデータを削除しました。"
     redirect_to base_points_url # 一覧へ遷移
