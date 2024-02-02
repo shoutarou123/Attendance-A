@@ -2,8 +2,8 @@ class AttendancesController < ApplicationController
 
   # application_controllerで定義しているのでattendance_controllerでも使用できる
   before_action :set_user, only: [:edit_one_month, :update_one_month] # @user = User.find(params[:id])使いまわし
-  before_action :logged_in_user, only: [:update, :edit_one_month] # ﾛｸﾞｲﾝしていなければ勤怠登録、勤怠編集ﾍﾟｰｼﾞ遷移できない
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month] # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
+  before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_req] # ﾛｸﾞｲﾝしていなければ勤怠登録、勤怠編集ﾍﾟｰｼﾞ遷移できない
+  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_req] # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
   before_action :set_one_month, only: :edit_one_month # ﾍﾟｰｼﾞ出力前に1ヶ月分のﾃﾞｰﾀの存在を確認・ｾｯﾄを勤怠編集ﾍﾟｰｼﾞに適用
 
   def update
@@ -41,10 +41,24 @@ class AttendancesController < ApplicationController
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
     redirect_to attendances_edit_one_month_user_url(date: params[:date]) # 勤怠編集ﾍﾟｰｼﾞに遷移
   end
+  
+  def edit_overtime_req  #残業申請
+    @user = User.find(params[:id])
+    
+    
+    respond_to do |format|
+      format.html { render partial: 'attendances/edit_overtime_req', locals: { user: @user } }
+      format.turbo_stream
+    end
+  end
 
   private
     def attendances_params # 1ヶ月分の勤怠情報を扱います
       params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+    end
+    
+    def overtime_req_params
+      params.require(:user).permit(attendances: [:ended_at, :approved, :task_description, :confirmed_request])[:attendances]
     end
 
     # beforeフィルター

@@ -79,6 +79,15 @@ class UsersController < ApplicationController
   def update_basic_info
   end
 
+  def attendance_log
+    @attendances = @user.attendances.where(chg_status: "承認").order(:worked_on)
+  
+    if params["select_year(1i)"].present? && params["select_month(2i)"].present?
+      @first_day = (params["select_year(1i)"] + "-" + params["select_month(2i)"] + "-01").to_date
+      @attendances = @user.attendances.where(worked_on: @first_day..@first_day.end_of_month, chg_status: "承認").order(:worked_on)
+    end
+  end
+  
   private
 
     def user_params #StrongParametersなのでここに記述しないと更新が反映されない。
