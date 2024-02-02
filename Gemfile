@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "3.0.6"
+ruby "3.2.1"
 gem "rails", "~> 7.1.2" # gem "rails", "~> 7.1.0"
 gem 'bcrypt' # has_secure_passwordを使って、ﾊﾟｽﾜｰﾄﾞをﾊｯｼｭ化するため必要
 gem 'faker'
