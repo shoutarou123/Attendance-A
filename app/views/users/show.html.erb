@@ -76,7 +76,7 @@
     <tbody>
       <% @attendances.each do |day| %>
         <tr>
-          <td><%= link_to "残業申請", attendances_edit_overtime_req_user_path(date: day.worked_on), data: { turbo_frame: 'modal' }, class: "btn btn-primary" %></td>
+          <td><%= link_to "残業申請", attendances_edit_overtime_req_user_path(day: day.worked_on), data: { turbo_frame: 'modal' }, class: "btn btn-primary" %></td>
          <td><%= l(day.worked_on, format: :short) %></td> <!--日付-->
               <% class_for_day = case $days_of_the_week[day.worked_on.wday]
                 when '土'

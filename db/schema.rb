@@ -20,6 +20,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_02_140144) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "over_time_req"
+    t.string "chg_confirmed"
+    t.string "chg_status"
+    t.string "confirmed_request"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -41,9 +44,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_02_140144) do
     t.string "remember_digest"
     t.string "affiliation"
     t.boolean "admin", default: false
-    t.datetime "basic_work_time", default: "2024-02-01 23:00:00"
-    t.datetime "designated_work_start_time", default: "2024-02-01 23:30:00"
-    t.datetime "designated_work_end_time", default: "2024-02-02 08:15:00"
+    t.datetime "basic_work_time", default: "2024-02-05 23:00:00"
+    t.datetime "designated_work_start_time", default: "2024-02-05 23:30:00"
+    t.datetime "designated_work_end_time", default: "2024-02-06 08:15:00"
     t.integer "uid"
     t.integer "employee_number"
     t.index ["email"], name: "index_users_on_email", unique: true

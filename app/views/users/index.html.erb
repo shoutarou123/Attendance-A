@@ -3,6 +3,10 @@
 <% provide(:button_text, '更新') %>
 <h1>ユーザー一覧</h1>
 
+<% @users.each do |user| %>
+  <%= link_to '基本情報編集', edit_basic_info_user_path(user), data: { turbo_frame: 'modal' }, class: "btn btn-success" %>
+<% end %>
+
 <%= paginate @users, theme: 'twitter-bootstrap-4' %> <!--will pegenateからkaminariに変更-->
 
 <div class="container">
