@@ -9,6 +9,10 @@ User.create!(name: "Sample User",
              password_confirmation: "password",
              admin: true) # 管理者だけが管理権限持つようにしている
 
+BasePoint.create!(number: 1,
+                  name: "拠点１",
+                  attendance_type: "出勤")
+
 60.times do |n|
   name  = Faker::Name.name
   email = "sample-#{n+1}@email.com"
