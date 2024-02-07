@@ -1,19 +1,20 @@
 <%= provide(:title, 'overtime-req') %>
 
 <%= turbo_frame_tag 'modal' do %>
-<div class="modal-dialog modal-lg modal-dialog-center" data-controller="edit_overtime_req">
-  <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" data-action="edit_overtime-req#close" aria-label="Close">
-        <span aria-hidden="true">×</span>
-      </button>
+  <div class="modal-dialog modal-lg modal-dialog-center" data-controller="edit_overtime_req">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-action="edit_overtime-req#close" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
 
     <%# 一般ユーザーでの残業申請フォーム %>
         <h1 class="modal-title">【残業申請】</h1>
-    </div>
-    <div class="modal-body">
+      </div>
+      
+      <div class="modal-body">
         <div class="row">
-          <div class="col-md-10 col-md-offset-3">
+          <div class="col-md-6 col-md-offset-3">
             
             <table class="table table-striped table-bordered table-condensed">
               <thead>
@@ -26,23 +27,23 @@
                   <td colspan="6">指示者確認㊞</td>
                 </tr>
               </thead>
+              
               <tbody>
-                
-                  <tr class="text-center">
-                    <td><%= l(@attendance.worked_on, format: :short) %></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="6"></td>
-                    <td colspan="6"></td>
-                    <td colspan="6"></td>
-                  </tr>
+                <tr class="text-center">
+                  <td><%= l(@attendance.worked_on, format: :short) %></td> <!--日付-->
+                  <td><%= $days_of_the_week[@attendance.worked_on.wday] %></td> <!--曜日-->
+                  <td></td> <!--終了予定時間日-->
+                  <td colspan="6"><%= attendance.check_box :approved %></td> <!--翌日-->
+                  <td colspan="6"></td> <!--業務処理内容日-->
+                  <td colspan="6"></td> <!--指示者確認㊞-->
+                </tr>
               </tbody>
             </table> 
-              <%= "変更を送信する", class: "btn btn-primary btn-block modal-btn" %>
-              <button type="button" class="btn btn-default btn-form-control" data-action="edit_overtime_req#close">キャンセル</button>
+              
+            <button type="button" class="btn btn-default btn-basic-info" data-action="edit_overtime_req#close">キャンセル</button>
           </div>
         </div>
+      </div>
     </div>
   </div>
-</div>
 <% end %>

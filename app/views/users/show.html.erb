@@ -33,11 +33,12 @@
   <p>【残業申請のお知らせ】</p>
 </div>
 
-<div class="btn">
-  <%= link_to "勤怠を編集",  attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary"%>
-  <%= link_to "CSV出力", '#', class: "btn btn-primary"%>
-  <p> <%= link_to "勤怠修正ログ（承認済）", attendance_log_user_path, class: "btn btn-primary" if current_user == @user %></p>
-</div>
+
+  <div class="btn">
+    <%= link_to "勤怠を編集",  attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary"%>
+    <%= link_to "CSV出力", '#', class: "btn btn-primary"%>
+    <p> <%= link_to "勤怠修正ログ（承認済）", attendance_log_user_path, class: "btn btn-primary" if current_user == @user %></p>
+  </div>
 
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
@@ -75,8 +76,9 @@
 
     <tbody>
       <% @attendances.each do |day| %>
+        <% if current_user == @user %>
         <tr>
-          <td><%= link_to "残業申請", attendances_edit_overtime_req_user_path(day: day.worked_on), data: { turbo_frame: 'modal' }, class: "btn btn-primary" %></td>
+          <td><%= link_to "残業申請", attendances_edit_overtime_req_user_path(date: day.worked_on), data: { turbo_frame: 'modal' }, class: "btn btn-primary" %></td>
          <td><%= l(day.worked_on, format: :short) %></td> <!--日付-->
               <% class_for_day = case $days_of_the_week[day.worked_on.wday]
                 when '土'
@@ -111,6 +113,7 @@
           <td></td>
           <td></td>
         </tr>
+        <% end %>
       <% end %>
     </tbody>
 

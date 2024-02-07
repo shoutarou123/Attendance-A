@@ -22,6 +22,7 @@ gem 'rails-i18n' # 日本語化
 gem 'kaminari' # kaminariﾍﾟｰｼﾞﾈｰｼｮﾝ
 gem 'bootstrap4-kaminari-views' # kaminariをbootstrapにするため
 gem 'roo' # CSVﾌｧｲﾙを読み込むためのもの
+gem 'pry-rails' # ﾃﾞﾊﾞｯｸﾞ確認ツール
 
 group :development, :test do
   gem "debug", platforms: %i[ mri mswin mswin64 mingw x64_mingw ]

@@ -1,9 +1,9 @@
 class AttendancesController < ApplicationController
 
   # application_controllerで定義しているのでattendance_controllerでも使用できる
-  before_action :set_user, only: [:edit_one_month, :update_one_month] # @user = User.find(params[:id])使いまわし
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_req] # @user = User.find(params[:id])使いまわし
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_req] # ﾛｸﾞｲﾝしていなければ勤怠登録、勤怠編集ﾍﾟｰｼﾞ遷移できない
-  before_action :admin_or_correct_user # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
+  before_action :admin_or_correct_user, only: [:edit_overtime_req] # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
   before_action :set_one_month, only: :edit_one_month # ﾍﾟｰｼﾞ出力前に1ヶ月分のﾃﾞｰﾀの存在を確認・ｾｯﾄを勤怠編集ﾍﾟｰｼﾞに適用
 
   def update
@@ -43,9 +43,11 @@ class AttendancesController < ApplicationController
   end
   
   def edit_overtime_req  #残業申請
-    @user = User.find(params[:id])
-    @attendance = @user.attendances.find_by(worked_on: params[:date]) 
-    @superior = User.where(superior: true).where.not(id: @current_user.id)
+    @attendance = @user.attendances.find_by(worked_on: params[:date])
+   
+    # @user = User.find(params[:id])
+    # @attendance = @user.attendances.find_by(worked_on: params[:date]) 
+    # @superior = User.where(superior: true).where.not(id: @current_user.id)
     respond_to do |format|
       format.html { render partial: 'attendances/edit_overtime_req', locals: { user: @user } }
       format.turbo_stream
@@ -57,16 +59,12 @@ class AttendancesController < ApplicationController
       params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
     end
     
-    def overtime_req_params
-      params.require(:user).permit(attendances: [:ended_at, :approved, :task_description, :confirmed_request])[:attendances]
-    end
-
     # beforeフィルター
-    # def admin_or_correct_user # 管理権限者、または現在ﾛｸﾞｲﾝしているﾕｰｻﾞｰを許可します。
-    #   @user = User.find(params[:user_id]) if @user.blank? # @userが空だったらuser_idを探して代入
-    #   unless current_user?(@user) || current_user.admin? # 現在ﾕｰｻﾞｰじゃない又は管理権限が無い場合
-    #     flash[:danger] = "編集権限がありません。"
-    #     redirect_to(root_url)
-    #   end
-    # end
+    def admin_or_correct_user # 管理権限者、または現在ﾛｸﾞｲﾝしているﾕｰｻﾞｰを許可します。
+      @user = User.find(params[:user_id]) if @user.blank? # @userが空だったらuser_idを探して代入
+      unless current_user?(@user) || current_user.admin? # 現在ﾕｰｻﾞｰじゃない又は管理権限が無い場合
+        flash[:danger] = "編集権限がありません。"
+        redirect_to(root_url)
+      end
+    end
 end
