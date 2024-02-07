@@ -17,7 +17,7 @@
       <tr>
         <td><%= link_to "拠点情報追加", new_base_point_path, class: "btn btn-primary" %></td>
         <td><%= link_to "修正", edit_base_point_path(base_point.id), class: "btn btn-primary" %></td>
-        <td><%= link_to "削除", base_point, date: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
+        <td><%= link_to "削除", base_point_path(base_point), data: { turbo_method: :delete, turbo_confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
         <td><%= base_point.number %></td>
         <td><%= base_point.name %></td>
         <td><%= base_point.attendance_type %></td>

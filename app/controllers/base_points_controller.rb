@@ -5,15 +5,8 @@ class BasePointsController < ApplicationController
   end
 
   def show
-    @base_point = BasePoint.find(params[:id])
-    if @base_point.destroy
-      flash[:success] = "#{@base_point.name}のデータを削除しました。"
-      redirect_to base_points_url
-    else
-      render 'inded', status: :unprocessable_entity
-    end
   end
-  
+
   def new
     @base_point = BasePoint.new
   end
@@ -43,6 +36,13 @@ class BasePointsController < ApplicationController
   end
 
   def destroy
+    @base_point = BasePoint.find(params[:id])
+    if @base_point.destroy
+      flash[:success] = "#{@base_point.name}のデータを削除しました。"
+      redirect_to base_points_url
+    else
+      render 'index', status: :unprocessable_entity
+    end
   end
 
   private
