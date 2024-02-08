@@ -9,6 +9,15 @@ User.create!(name: "Sample User",
              password_confirmation: "password",
              admin: true) # 管理者だけが管理権限持つようにしている
 
+User.create!(name: "上長A",
+             email: "sample-A@email.com",
+             employee_number: 2,
+             uid: 002,
+             password: "password",
+             password_confirmation: "password",
+             role: "superior",
+             superior: true)
+
 BasePoint.create!(number: 1,
                   name: "拠点１",
                   attendance_type: "出勤")

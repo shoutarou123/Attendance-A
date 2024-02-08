@@ -44,12 +44,10 @@ class AttendancesController < ApplicationController
   
   def edit_overtime_req  #残業申請
     @attendance = @user.attendances.find_by(worked_on: params[:date])
-   
-    # @user = User.find(params[:id])
-    # @attendance = @user.attendances.find_by(worked_on: params[:date]) 
-    # @superior = User.where(superior: true).where.not(id: @current_user.id)
+    @superior = User.where(superior: true).where.not(id: @current_user.id)
+    
     respond_to do |format|
-      format.html { render partial: 'attendances/edit_overtime_req', locals: { user: @user } }
+      format.html { render partial: 'attendances/edit_overtime_req', locals: { attendance: @attendance } }
       format.turbo_stream
     end
   end
