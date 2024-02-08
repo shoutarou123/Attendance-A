@@ -24,3 +24,7 @@ ja:
         finished_at: 退社
         note: 備考
         user: ユーザーID
+      base_point:
+        number: 拠点番号
+        name: 拠点名
+        attendance_type: 勤怠種類

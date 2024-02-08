@@ -51,6 +51,27 @@ class AttendancesController < ApplicationController
       format.turbo_stream
     end
   end
+  
+  def update_overtime_req
+    overtime_req_params.each do |id, item|
+      attendance = Attendance.find(id)
+      if item["ended_at(i4)"].blank? || item["ended_at(i5)"].blank? || item[:confirmed_request].blank?
+        flag = 1 if item[:approved] == '1'
+      else
+        flag = 1
+      end
+      if flag == 1
+        attendance.overwork_chk = '0'
+        attendance.overwork_status = "申請中"
+        overtime_instructor = item["overtime_instructor"]
+        attendance.update(item.merge(overtime_instructor: overtime_instructor))
+        flash[:success] = "残業申請情報を送信しました。"
+      else
+        flash[:dager] = "未入力な項目があったため、申請をキャンセルしました。"
+      end
+    end
+    redirect_to user_url # user showに遷移
+  end
 
   private
     def attendances_params # 1ヶ月分の勤怠情報を扱います
