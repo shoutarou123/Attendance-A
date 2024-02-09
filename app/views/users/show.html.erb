@@ -107,10 +107,10 @@
             <% end %>
           </td>
           <td><%= day.note %></td> <!--備考-->
+          <td><%= l(day.ended_at, format: :timeH) if day.ended_at.present? %></td> <!--終了予定時間 時-->
+          <td><%= l(day.ended_at, format: :timeM) if day.ended_at.present? %></td> <!--終了予定時間 分-->
           <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td><%= day.task_description %></td> <!--業務処理内容-->
           <td></td>
         </tr>
         <% end %>
