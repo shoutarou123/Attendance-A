@@ -26,6 +26,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_02_140144) do
     t.string "task_description"
     t.boolean "approved"
     t.datetime "ended_at"
+    t.boolean "overwork_chk"
+    t.string "overwork_status"
+    t.string "overtime_instructor"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
@@ -48,9 +51,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_02_140144) do
     t.string "affiliation"
     t.string "role"
     t.boolean "admin", default: false
-    t.datetime "basic_work_time", default: "2024-02-07 23:00:00"
-    t.datetime "designated_work_start_time", default: "2024-02-07 23:30:00"
-    t.datetime "designated_work_end_time", default: "2024-02-08 08:15:00"
+    t.datetime "basic_work_time", default: "2024-02-08 23:00:00"
+    t.datetime "designated_work_start_time", default: "2024-02-08 23:30:00"
+    t.datetime "designated_work_end_time", default: "2024-02-09 08:15:00"
     t.integer "uid"
     t.integer "employee_number"
     t.index ["email"], name: "index_users_on_email", unique: true
