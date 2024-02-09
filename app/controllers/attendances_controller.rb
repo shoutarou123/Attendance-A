@@ -55,7 +55,7 @@ class AttendancesController < ApplicationController
   def update_overtime_req
     overtime_req_params.each do |id, item|
       attendance = Attendance.find(id)
-      if item["ended_at(i4)"].blank? || item["ended_at(i5)"].blank? || item[:confirmed_request].blank?
+      if item["ended_at(4i)"].blank? || item["ended_at(5i)"].blank? || item[:confirmed_request].blank?
         flag = 1 if item[:approved] == '1'
       else
         flag = 1
@@ -78,6 +78,9 @@ class AttendancesController < ApplicationController
       params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
     end
     
+    def overtime_req_params
+      params.require(:user).permit(attendances: [:ended_at, :approved, :task_description, :confirmed_request])[:attendances]
+    end
     # beforeフィルター
     def admin_or_correct_user # 管理権限者、または現在ﾛｸﾞｲﾝしているﾕｰｻﾞｰを許可します。
       @user = User.find(params[:user_id]) if @user.blank? # @userが空だったらuser_idを探して代入
