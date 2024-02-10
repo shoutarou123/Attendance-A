@@ -1,9 +1,9 @@
 class AttendancesController < ApplicationController
 
   # application_controllerで定義しているのでattendance_controllerでも使用できる
-  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_req] # @user = User.find(params[:id])使いまわし
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_req, :edit_overtime_aprv] # @user = User.find(params[:id])使いまわし
   before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_req] # ﾛｸﾞｲﾝしていなければ勤怠登録、勤怠編集ﾍﾟｰｼﾞ遷移できない
-  before_action :admin_or_correct_user, only: [:edit_overtime_req] # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
+  before_action :admin_or_correct_user, only: [:edit_overtime_req, :edit_overtime_aprv] # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
   before_action :set_one_month, only: :edit_one_month # ﾍﾟｰｼﾞ出力前に1ヶ月分のﾃﾞｰﾀの存在を確認・ｾｯﾄを勤怠編集ﾍﾟｰｼﾞに適用
 
   def update
@@ -71,6 +71,11 @@ class AttendancesController < ApplicationController
       end
     end
     redirect_to user_url # user showに遷移
+  end
+  
+  def edit_overtime_aprv # 上長への残業申請
+    Attendance.where(confirmed_request: @user.name, overwork_status: "申請中")
+    @users = User.where(id: @attendance.select(:user_id))
   end
 
   private

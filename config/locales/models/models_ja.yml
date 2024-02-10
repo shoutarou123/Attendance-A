@@ -24,6 +24,9 @@ ja:
         finished_at: 退社
         note: 備考
         user: ユーザーID
+        over_time_req: 残業申請
+        confirmed_request: 申請する上長
+        ended_at: 終了予定時間
       base_point:
         number: 拠点番号
         name: 拠点名
