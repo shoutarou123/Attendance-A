@@ -65,3 +65,15 @@
   margin: 15px 0;
   width: 30%;
 }
+
+// 【残業申請のお知らせ】
+.sp-link {
+  color: red;
+}
+
+// 残業申請メッセージ
+.notification-badge {
+  color: red;
+  font-weight: bold; /*太くする*/
+  border: 3px solid red; /* 赤色のボーダーで囲う */
+}
