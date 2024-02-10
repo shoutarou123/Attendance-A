@@ -5,9 +5,10 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-action="edit_overtime-req#close" aria-label="Close">
-          <span aria-hidden="true">×</span>
+          <!--<span aria-hidden="true">×</span>-->
+           <%= link_to "×", '#', data: { controller: "modals", action: 'modals#click->close' } %>
         </button>
-      </div>
+      </div✕
       
     <!--一般ユーザーでの残業申請フォーム-->
       <h1 class="modal-title">【残業申請】</h1>
@@ -41,7 +42,8 @@
               </tbody>
             </table> 
               <%= f.submit "変更を送信する", class: "btn btn-primary btn-block modal-btn" %>
-            <button type="button" class="btn btn-default btn-basic-info" data-action="edit_overtime_req#close">キャンセル</button>
+            <!--<button type="button" class="btn btn-default btn-basic-info" data-action="edit_overtime_req#close">キャンセル</button>-->
+            <%= link_to 'キャンセル', '#', data: { controller: "modals", action: 'modals#click->close' } %>
           </div>
         </div>
         <% end %>

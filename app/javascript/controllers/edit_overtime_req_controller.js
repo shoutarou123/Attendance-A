@@ -21,3 +21,10 @@ export default class extends Controller {
     this.element.remove(); // モーダルの要素を削除
   }
 }
+
+// モーダルをリロードするためのメソッド　これがないとメッセージ表示されない
+document.addEventListener("turbo:frame-missing", (event) => {
+      const { detail: { response, visit } } = event;
+      event.preventDefault();
+      visit(response.url);
+});

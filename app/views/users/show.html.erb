@@ -118,7 +118,15 @@
           <td><%= l(day.ended_at, format: :timeM) if day.ended_at.present? %></td> <!--終了予定時間 分-->
           <td></td>
           <td><%= day.task_description %></td> <!--業務処理内容-->
-          <td></td>
+          <td>　<!--指示者確認㊞-->
+             <% if day.overwork_status == "申請中" %>
+               <%= "#{day.confirmed_request}へ残業#{day.overwork_status}" %>
+             <% elsif day.overwork_status == "承認" %>
+               <%= "残業#{day.overwork_status}済" %>
+             <% elsif day.overwork_status == "否認" %>
+               <%= "残業#{day.overwork_status}" %>
+             <% end %>
+          </td>
         </tr>
         <% end %>
       <% end %>

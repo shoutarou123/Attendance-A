@@ -67,7 +67,7 @@ class AttendancesController < ApplicationController
         attendance.update(item.merge(overtime_instructor: overtime_instructor))
         flash[:success] = "残業申請情報を送信しました。"
       else
-        flash[:dager] = "未入力な項目があったため、申請をキャンセルしました。"
+        flash[:danger] = "未入力な項目があったため、申請をキャンセルしました。"
       end
     end
     redirect_to user_url # user showに遷移
