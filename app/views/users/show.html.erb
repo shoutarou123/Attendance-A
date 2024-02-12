@@ -20,7 +20,7 @@
       <td>所属: <%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
       <td>名前：<%= @user.name %></td>
       <td>コード</td>
-      <td></td>
+      <td><%= @user.uid %></td>
       <td>出勤日数 <%= @worked_sum %>日</td>
       <td>締め：<%= l(@last_day, format: :short) %></td>
     </tr>
@@ -116,7 +116,12 @@
           <td><%= day.note %></td> <!--備考-->
           <td><%= l(day.ended_at, format: :timeH) if day.ended_at.present? %></td> <!--終了予定時間 時-->
           <td><%= l(day.ended_at, format: :timeM) if day.ended_at.present? %></td> <!--終了予定時間 分-->
-          <td></td>
+          <td> <!--時間外時間-->
+            <% if day.ended_at.present? %> <!--終了時間が存在するとき-->
+              <% formatted_ended_at = format_ended_at(day) %> <!--ﾌｫｰﾏｯﾄの終了時間を代入-->
+              <%= calculate_overtime_hours(formatted_ended_at, @user.designated_work_end_time, day.approved) %>
+            <% end %>
+          </td>
           <td><%= day.task_description %></td> <!--業務処理内容-->
           <td>　<!--指示者確認㊞-->
              <% if day.overwork_status == "申請中" %>

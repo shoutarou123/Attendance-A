@@ -34,10 +34,14 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @superior = User.where(superior: true).where.not(id: @current_user.id)
+    @attendance = @user.attendances.find_by(worked_on: @first_day)
+    @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on) # 該当日の残業申請取得
     @worked_sum = @attendances.where.not(started_at: nil).count # 出社が何も無いじゃない数
     @first_day = Date.current.beginning_of_month # 現在日付の月初
     @last_day = @first_day.end_of_month # 上記の月の末日
     @aprv_count = Attendance.where(confirmed_request: @user.name, overwork_status: "申請中").count # 残業申請のお知らせ件数
+    @overtime_instructor = @attendances.first.overtime_instructor if @attendances.first  
   end
   
   def new
