@@ -18,7 +18,7 @@ Rails.application.routes.draw do
       patch 'attendances/update_chg_req'
       get 'attendances/edit_overtime_req' #残業申請
       patch 'attendances/update_overtime_req'
-      get 'attendances/edit_overtime_aprv' #上長への残業申請
+      get 'attendances/edit_overtime_aprv' #上長が残業申請内容確認する画面
       patch 'attendances/update_overtime_aprv'
       patch 'attendances/update_monthly_req'  #一ヶ月分の勤怠申請
       get 'attendances/edit_monthly_aprv' #上長への一ヶ月分の勤怠申請
