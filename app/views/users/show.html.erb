@@ -32,7 +32,7 @@
   <p>【勤怠変更申請のお知らせ】</p>
 <% if @aprv_count > 0 %>
   <div>
-    <%= link_to "【残業申請のお知らせ】", attendances_edit_overtime_aprv_user_path(date: @first_day), data: { turbo_frame: 'modal' }, class: "sp-link" %>
+    <%= link_to "【残業申請のお知らせ】", attendances_edit_overtime_aprv_user_path(date: @first_day), data: { turbo_frame: 'modal' }, class: "sp-link" %> <!--引数はそのuserの月初-->
     <span class="notification-badge">
       <%= "#{@aprv_count}件の通知があります" %>
     </span>

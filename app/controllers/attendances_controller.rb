@@ -74,8 +74,8 @@ class AttendancesController < ApplicationController
   end
   
   def edit_overtime_aprv # 上長への残業申請
-    Attendance.where(confirmed_request: @user.name, overwork_status: "申請中")
-    @users = User.where(id: @attendance.select(:user_id))
+    @attendances = Attendance.where(confirmed_request: @user.name, overwork_status: "申請中") # confirmed_requestに名前があって、overwork_statusが申請中のものを探す
+    @users = User.where(id: @attendances.select(:user_id)) # idに上記のattendancesのuser_idが入っているものを取得
     
     respond_to do |format|
       format.html { render partial: 'attendances/edit_overtime_aprv', locals: { attendance: @attendance } }
