@@ -14,7 +14,7 @@ module AttendancesHelper
   end
   
   def format_ended_at(day)
-    day.ended_at.strftime("%H：%M") # 〇:〇表記に変換
+    day.ended_at.strftime('%H:%M') # 〇:〇表記に変換
   end
   
   def calculate_overtime_hours(formatted_ended_at, designated_work_end_time, approved)

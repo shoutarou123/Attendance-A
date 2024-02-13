@@ -27,16 +27,17 @@
   </table>
 </div>
 
-
+<% if current_user.superior? %>
   <p>【所属長承認申請のお知らせ】</p>
   <p>【勤怠変更申請のお知らせ】</p>
-<% if @aprv_count > 0 %>
-  <div>
-    <%= link_to "【残業申請のお知らせ】", attendances_edit_overtime_aprv_user_path(date: @first_day), data: { turbo_frame: 'modal' }, class: "sp-link" %> <!--引数はそのuserの月初-->
-    <span class="notification-badge">
-      <%= "#{@aprv_count}件の通知があります" %>
-    </span>
-  </div>
+  <% if @aprv_count > 0 %>
+    <div>
+      <%= link_to "【残業申請のお知らせ】", attendances_edit_overtime_aprv_user_path(date: @first_day), data: { turbo_frame: 'modal' }, class: "sp-link" %> <!--引数はそのuserの月初-->
+         <span class="notification-badge">
+           <%= "#{@aprv_count}件の通知があります" %>
+         </span>
+    </div>
+  <% end %>
 <% end %>
 
 
@@ -83,10 +84,13 @@
 
     <tbody>
       <% @attendances.each do |day| %>
-        <% if current_user == @user %>
-        <tr>
-          <td><%= link_to "残業申請", attendances_edit_overtime_req_user_path(date: day.worked_on), data: { turbo_frame: 'modal' }, class: "btn btn-primary" %></td>
-         <td><%= l(day.worked_on, format: :short) %></td> <!--日付-->
+        <tr class="text-center" >
+          <% if current_user == @user %>
+            <td>
+              <%= link_to "残業申請", attendances_edit_overtime_req_user_path(date: day.worked_on), data: { turbo_frame: 'modal' }, class: "btn btn-primary" %>
+            </td>
+          <% end %>
+          <td><%= l(day.worked_on, format: :short) %></td> <!--日付-->
               <% class_for_day = case $days_of_the_week[day.worked_on.wday]
                 when '土'
                      'text-primary'
@@ -106,7 +110,7 @@
           </td>
           <td><%= l(day.finished_at, format: :timeH) if day.finished_at.present? %></td> <!--時-->
           <td><%= l(day.finished_at, format: :timeM) if day.finished_at.present? %></td> <!--分-->
-          <td></td>
+          <td></td> <!--空スペース-->
           <td> <!--在社時間 attendance_helper参照-->
             <% if day.started_at.present? && day.finished_at.present? %> <!--出社も退社も存在する時-->
               <%= str_times = working_times(day.started_at, day.finished_at) %>
@@ -125,15 +129,14 @@
           <td><%= day.task_description %></td> <!--業務処理内容-->
           <td>　<!--指示者確認㊞-->
              <% if day.overwork_status == "申請中" %>
-               <%= "#{day.confirmed_request}へ残業#{day.overwork_status}" %>
+               <%= "#{day.confirmed_request}へ残業#{day.overwork_status}" %>&emsp;
              <% elsif day.overwork_status == "承認" %>
-               <%= "残業#{day.overwork_status}済" %>
+               <%= "残業#{day.overwork_status}済" %>&emsp;
              <% elsif day.overwork_status == "否認" %>
-               <%= "残業#{day.overwork_status}" %>
+               <%= "残業#{day.overwork_status}" %>&emsp;
              <% end %>
           </td>
         </tr>
-        <% end %>
       <% end %>
     </tbody>
 

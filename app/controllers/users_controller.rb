@@ -1,7 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # correct_userのbefore_actionで同じ@userが2回使用されてしまうため本ﾒｿｯﾄﾞを各ｱｸｼｮﾝに定義している
+  before_action :set_users, only: :show
   before_action :logged_in_user, only: [:index, :show, :working, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # ﾛｸﾞｲﾝしていなければ一覧画面、出勤中一覧画面、編集画面、編集更新、削除、基本情報編集できない
-  before_action :correct_user, only: [] # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
+  before_action :superior_users, only: [:show]
+  before_action :correct_user, only: :show # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
   before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info] # 管理権限がないと削除、基本情報編集できない。
   before_action :set_one_month, only: :show # ﾍﾟｰｼﾞ出力前に1ヶ月分のﾃﾞｰﾀの存在を確認・ｾｯﾄ showｱｸｼｮﾝ実行前に発動
 
@@ -33,10 +35,9 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
     @superior = User.where(superior: true).where.not(id: @current_user.id)
     @attendance = @user.attendances.find_by(worked_on: @first_day)
-    @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on) # 該当日の残業申請取得
+    @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)   # 該当日の残業申請取得
     @worked_sum = @attendances.where.not(started_at: nil).count # 出社が何も無いじゃない数
     @first_day = Date.current.beginning_of_month # 現在日付の月初
     @last_day = @first_day.end_of_month # 上記の月の末日

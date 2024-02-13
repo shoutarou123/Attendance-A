@@ -1,4 +1,4 @@
-<% provide(:title, 'overtime-aprv') %>
+<% provide(:title, 'overtime_aprv') %>
 
 <%= turbo_frame_tag 'modal' do %>
   <div class="modal-dialog modal-lg modal-dialog-center" data-controller="edit_overtime_aprv">
@@ -52,13 +52,13 @@
                         <% end %>
                       <% end %>
                     </tbody>
-                  </table>
+                  </table>              
                 </div>
-              </div>
-          <% end %>
-          <%= f.submit "変更を送信する", class: "btn btn-primary btn-block modal-btn" %>
-          <%= link_to 'キャンセル', '#', data: { controller: "modals", action: 'modals#click->close' } %>
+              </div> 
+            <% end %>
+          <%= f.submit "変更を送信する", class: "btn btn-primary btn-lg" %>
         <% end %>
+        <%= link_to 'キャンセル', '#', data: { controller: "modals", action: 'modals#click->close' } %>
       </div>
     </div>
   </div>

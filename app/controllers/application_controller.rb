@@ -9,6 +9,14 @@ class ApplicationController < ActionController::Base
   def set_user # paramsﾊｯｼｭからﾕｰｻﾞｰを取得。使いまわすため記述したもの。
     @user = User.find(params[:id])
   end
+  
+  def set_users
+    @users = User.all
+  end
+
+  def superior_users
+    @superior = User.where.not(role: ['上長A', '上長B'])
+  end
 
   def logged_in_user # ﾛｸﾞｲﾝ済のﾕｰｻﾞｰか確認します
     unless logged_in? # ﾛｸﾞｲﾝしていなければ
