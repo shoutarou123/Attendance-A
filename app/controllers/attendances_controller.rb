@@ -82,6 +82,32 @@ class AttendancesController < ApplicationController
       format.turbo_stream
     end
   end
+  
+  def update_overtime_aprv
+    flag = 0
+    overtime_aprv_params.each do |id, item|
+      if item[:overwork_chk] == '1' # 変更チェックがあれば
+        unless item[:overwork_status] == "申請中" # 指示者確認が申請中でない場合
+          flag += 1 # flagに1を足し上げる
+          attendance = Attendance.find(id) # Attendance.idを取得
+          if item[:overwork_status] == "なし" # 指示者確認がなしの場合
+            attendance.ended_at = nil # 終了予定時間がnilになる
+            attendance.task_description = nil # 業務処理内容がnilになる
+          elsif item[:overwork_status] == "否認"
+            attendance.ended_at = nil
+            attendance.task_description = nil
+          end
+          attendance.update(item) # attendance(item)を更新する
+        end
+      end
+      if flag > 0
+        flash[:success] = "残業申請を更新しました。"
+      else
+        flash[:danger] = "残業申請の更新に失敗しました。"
+      end
+      redirect_to user_url(date: params[:date])
+  end
+end
 
   private
     def attendances_params # 1ヶ月分の勤怠情報を扱います
