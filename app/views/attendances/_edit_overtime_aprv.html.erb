@@ -47,7 +47,7 @@
                             <td><%= day.task_description %></td> <!--業務処理内容-->
                             <td><%= attendance.select :overwork_status, ['なし', '申請中', '承認', '否認'], {}, { class: 'form-control' } %></td> <!--指示者確認㊞-->
                             <td><%= attendance.check_box :overwork_chk %></td> <!--変更-->
-                            <td><%= link_to "確認", user_path(user, date: day.worked_on.beginning_of_month), class: "btn btn-primary" %></td> <!--userにcurrent_userが入っている-->
+                            <td><%= link_to "確認", user_path(user, date: day.worked_on.beginning_of_month), target: "_blank", class: "btn btn-primary" %></td> <!--userにcurrent_userが入っている-->
                           </tr>
                         <% end %>
                       <% end %>

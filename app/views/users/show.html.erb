@@ -52,7 +52,9 @@
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
       <tr>
+        <% if current_user == @user %>
         <th rowspan="3">残業申請</th>
+        <% end %>
         <th rowspan="3">日付</th>
         <th rowspan="3">曜日</th>
         <th colspan="8">【実績】</th>
