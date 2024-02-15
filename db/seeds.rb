@@ -17,6 +17,15 @@ User.create!(name: "上長A",
              password_confirmation: "password",
              role: "superior",
              superior: true)
+             
+             User.create!(name: "上長B",
+             email: "sample-B@email.com",
+             employee_number: 3,
+             uid: 003,
+             password: "password",
+             password_confirmation: "password",
+             role: "superior",
+             superior: true)
 
 BasePoint.create!(number: 1,
                   name: "拠点１",
