@@ -35,6 +35,7 @@ class UsersController < ApplicationController
   end
 
   def show
+    @current_user = current_user
     @superior = User.where(superior: true).where.not(id: @current_user.id)
     @attendance = @user.attendances.find_by(worked_on: @first_day)
     @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)   # 該当日の残業申請取得
@@ -61,7 +62,6 @@ class UsersController < ApplicationController
   end
 
   def edit
-    user = User.find(params[:id])
   end
 
   def update

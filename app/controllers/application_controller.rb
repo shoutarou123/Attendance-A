@@ -26,6 +26,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_user?(user)
+    user = current_user
+  end
+
   def correct_user # ｱｸｾｽしたﾕｰｻﾞｰが現在ﾛｸﾞｲﾝしているﾕｰｻﾞｰか確認します
     # @user = User.find(params[:id])の記述が不要になる理由は上記のset_userで定義しており、引数に@userを指定しているため。
     redirect_to(root_url) unless current_user?(@user) # ﾕｰｻﾞｰが現在ﾕｰｻﾞｰと一致しなければ、ﾄｯﾌﾟﾍﾟｰｼﾞに遷移。ｾｯｼｮﾝﾍﾙﾊﾟｰのﾒｿｯﾄﾞを使用。
