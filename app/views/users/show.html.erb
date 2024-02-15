@@ -37,7 +37,14 @@
     </div>
   <% end %>
   
-  <p>【勤怠変更申請のお知らせ】</p>
+  <% if @month_count > 0 %>
+    <div>
+      <%= link_to "【勤怠変更申請のお知らせ】", attendances_edit_chg_req_user_path(date: @first_day), data: { turbo_frame: 'modal' }, class: "sp-link"%>
+        <span class="notification-badge">
+          <%= "#{@month_count}件の通知があります" %>
+        </span>
+    </div>
+  <% end %>
   
   <% if @aprv_count > 0 %>
     <div>
@@ -139,7 +146,16 @@
           </td>
           <td><%= day.task_description %></td> <!--業務処理内容-->
           <td>　<!--指示者確認㊞-->
-             <% if day.overwork_status == "申請中" %>
+            
+            <% if day.chg_status == "申請中" %> <!--勤怠編集申請状況表示-->
+              <%= "#{day.chg_confirmed}へ勤怠変更#{day.chg_status}" %>
+            <% elsif day.chg_status == "承認" %>
+              <%= "勤怠編集#{day.chg_status}済" %>
+            <% elsif day.chg_status == "否認" %>
+              <%= "勤怠編集#{day.chg_status}" %>
+            <% end %>
+            <br>
+             <% if day.overwork_status == "申請中" %> <!--残業申請状況表示-->
                <%= "#{day.confirmed_request}へ残業#{day.overwork_status}" %>&emsp;
              <% elsif day.overwork_status == "承認" %>
                <%= "残業#{day.overwork_status}済" %>&emsp;
@@ -159,13 +175,23 @@
         <td colspan="2">累計在社時間</td>
         <td colspan="4" rowspan="2"></td>
         <td>
-          <%= form_with(model: @user, url: attendances_update_monthly_req_user_path, local: true, method: :patch) do |f| %>
-            <%= f.fields_for "attendances[]", @attendance do |attendance| %>
-              所属長承認
-              
-              <%= attendance.collection_select :aprv_confirmed, @superior, :name, :name, { include_blank: true }, { class: 'form-control' } %>
+          <% if current_user == @user %>
+            <%= form_with(model: @user, url: attendances_update_monthly_req_user_path, local: true, method: :patch) do |f| %>
+              <%= f.fields_for "attendances[]", @attendance do |attendance| %>
+                所属長承認
+                <% if @attendance.aprv_status.blank? || @attendance.aprv_status == "なし" %>
+                  未
+                <% elsif @attendance.aprv_status == "申請中" %>
+                  <%= "#{@attendance.aprv_confirmed}へ#{@attendance.aprv_status}" %>
+                <% elsif @attendance.aprv_status == "承認" %>
+                  <%= "#{@attendance.aprv_confirmed}から#{@attendance.aprv_status}済" %>
+                <% elsif @attendance.aprv_status == "否認" %>
+                  <%= "#{@attendance.aprv_confirmed}から#{@attendance.aprv_status}" %>
+                <% end %>
+                <%= attendance.collection_select :aprv_confirmed, @superior, :name, :name, { include_blank: true }, { class: 'form-control' } %>
+              <% end%>
+                <%= f.submit "申請", class: "btn btn-primary btn-block montly-req-btn" %>
             <% end%>
-              <%= f.submit "申請", class: "btn btn-primary btn-block montly-req-btn" %>
           <% end%>
         </td>
       </tr>

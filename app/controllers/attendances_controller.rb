@@ -2,8 +2,8 @@ class AttendancesController < ApplicationController
 
   # application_controllerで定義しているのでattendance_controllerでも使用できる
   before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_req, :edit_overtime_aprv, :update_overtime_req, :update_overtime_aprv, :edit_monthly_aprv] # @user = User.find(params[:id])使いまわし
-  before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_req, :edit_overtime_aprv, :update_overtime_req, :update_overtime_aprv, :edit_monthly_aprv] # ﾛｸﾞｲﾝしていなければ勤怠登録、勤怠編集ﾍﾟｰｼﾞ遷移できない
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_req, :edit_overtime_aprv, :update_overtime_req, :update_overtime_aprv, :edit_monthly_aprv] # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
+  before_action :logged_in_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_req, :edit_overtime_aprv, :update_overtime_req, :update_overtime_aprv, :edit_monthly_aprv] # ﾛｸﾞｲﾝしていなければ勤怠登録、勤怠編集ﾍﾟｰｼﾞ遷移できない
+  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_req, :edit_overtime_aprv, :update_overtime_req, :update_overtime_aprv, :edit_monthly_aprv, :update_monthly_req] # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
   before_action :set_one_month, only: :edit_one_month # ﾍﾟｰｼﾞ出力前に1ヶ月分のﾃﾞｰﾀの存在を確認・ｾｯﾄを勤怠編集ﾍﾟｰｼﾞに適用
 
   def update
@@ -25,21 +25,35 @@ class AttendancesController < ApplicationController
     redirect_to @user
   end
 
-  def edit_one_month
+  def edit_one_month # 勤怠編集 get
+    @superior = User.where(superior: true).where.not(id: @current_user.id)
   end
 
-  def update_one_month
-    ActiveRecord::Base.transaction do # ﾄﾗﾝｻﾞｸｼｮﾝを開始しますActiveRecord::Base.transaction do から end までﾄﾗﾝｻﾞｸｼｮﾝを開始している。これは、一連のﾃﾞｰﾀﾍﾞｰｽ操作が全て成功するかどれか1つでもｴﾗｰが発生した場合には全ての操作をﾛｰﾙﾊﾞｯｸする仕組みです。ﾄﾗﾝｻﾞｸｼｮﾝ内の操作が成功した場合はｺﾐｯﾄされます。
-      attendances_params.each do |id, item| # attendances_params というﾃﾞｰﾀ構造から、各勤怠情報のIDと更新情報を取り出して、それぞれのﾃﾞｰﾀに対して以下の処理を実行します。
-        attendance = Attendance.find(id) # idﾚｺｰﾄﾞに基づいたAttendance情報を取得
-        attendance.update!(item) # 更新に成功するとそのまま続行し、失敗した場合は例外を発生させます。!をつけている場合はfalseでは無く例外処理を返します
+  def update_one_month # 勤怠編集 patch
+    flag = 0
+    attendances_params.each do |id, item| # 4i=時 5i=分
+      unless item["started_at(4i)"].blank? || item["started_at(5i)"].blank? || item["finished_at(4i)"].blank? || item["finished_at(5i)"].blank?
+        attendance = Attendance.find(id)
+        if item[:chg_next_day].present? && item[:chg_confirmed].present?
+          unless attendance.chg_status == "申請中"
+            flag += 1
+            if attendance.b4_started_at.blank? && attendace.b4_finished_at.blank? # 初回の変更のみ保存
+              attendance.b4_started_at = attendance.started_at
+              attendace.b4_finished_at = attendance.finished_at
+            end
+            attendance.chg_status = "申請中"
+            attendace.update!(item)
+          end
+        end
       end
     end
-    flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
-    redirect_to user_url(date: params[:date])
-  rescue ActiveRecord::RecordInvalid # 例外発生時の処理
-    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
-    redirect_to attendances_edit_one_month_user_url(date: params[:date]) # 勤怠編集ﾍﾟｰｼﾞに遷移
+    if flag > 0
+      flash[:success] = "勤怠変更申請を送信しました。"
+      redirect_to user_url(date: params[:date])
+    else
+      flash[:danger] = "無効な入力データがあったため、更新をキャンセルしました。"
+      redirect_to attendances_edit_one_month_user_url(date: params[:date])
+    end
   end
   
   def edit_overtime_req  #残業申請
@@ -136,10 +150,33 @@ class AttendancesController < ApplicationController
       format.turbo_stream
     end
   end
+  
+  def update_monthly_aprv
+    flag = 0
+    monthly_aprv_params.each do |id, item|
+      if item[:aprv_chk] == "1"
+        unless[:aprv_status] == "申請中"
+          flag += 1
+          attendance = Attendance.find(id)
+          if item[:aprv_status] == "なし"
+            attendance.aprv_status = nil
+            attendance.aprv_confirmed = nil
+          end
+          attendance.update(item)
+        end
+      end
+    end
+    if flag > 0
+      flash[:success] = "１カ月分の勤怠申請を更新しました。"
+    else
+      flash[:danger] = "１カ月分の勤怠申請の更新に失敗しました。"
+    end
+    redirect_to user_url
+  end
 
   private
     def attendances_params # 1ヶ月分の勤怠情報を扱います
-      params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+      params.require(:user).permit(attendances: [:started_at, :finished_at, :chg_next_day, :note, :chg_confirmed])[:attendances]
     end
     
     def overtime_req_params
@@ -153,7 +190,11 @@ class AttendancesController < ApplicationController
     def monthly_req_params
       params.require(:user).permit(attendances: :aprv_confirmed)[:attendances]
     end
-     
+    
+    def monthly_aprv_params
+      params.require(:user).permit(attendances: [:aprv_chk, :aprv_status])[:attendances]
+    end
+      
     # beforeフィルター
     def admin_or_correct_user # 管理権限者、または現在ﾛｸﾞｲﾝしているﾕｰｻﾞｰを許可します。
       @user = User.find(params[:user_id]) if @user.blank? # @userが空だったらuser_idを探して代入
