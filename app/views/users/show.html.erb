@@ -3,9 +3,9 @@
   <table class="table table-bordered table-condensed user-table"> <!--borderedボーダー付き、condensed行間の狭い。-->
     <tr>
       <td rowspan="2">
-        <%= link_to "←", user_path(date: @first_day.prev_month), class:"btn btn-primary" %>
+        <%= link_to "←", user_path(date: @first_day.prev_month), class:"btn btn-primary" if current_user == @user %>
           <%= l(@first_day,format: :middle) %> 時間管理表
-        <%= link_to "→", user_path(date: @first_day.next_month), class: "btn btn-primary" %>
+        <%= link_to "→", user_path(date: @first_day.next_month), class: "btn btn-primary" if current_user == @user %>
       </td>
       <td>指定勤務開始時間<%= format_basic_info(@user.designated_work_start_time)%></td>
       <td colspan="3" rowspan="2">基本時間<%= format_basic_info(@user.basic_work_time)%></td>
@@ -43,8 +43,8 @@
 
 
   <div class="btn">
-    <%= link_to "勤怠を編集",  attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary"%>
-    <%= link_to "CSV出力", '#', class: "btn btn-primary"%>
+    <%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-primary" if current_user == @user %>
+    <%= link_to "CSV出力", '#', class: "btn btn-primary" if current_user == @user %>
     <p> <%= link_to "勤怠修正ログ（承認済）", attendance_log_user_path, class: "btn btn-primary" if current_user == @user %></p>
   </div>
 
