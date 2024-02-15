@@ -29,6 +29,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_02_140144) do
     t.boolean "overwork_chk"
     t.string "overwork_status"
     t.string "overtime_instructor"
+    t.string "aprv_confirmed"
+    t.boolean "aprv_chk"
+    t.string "aprv_status"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 

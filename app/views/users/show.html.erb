@@ -28,8 +28,17 @@
 </div>
 
 <% if current_user.superior? %>
-  <p>【所属長承認申請のお知らせ】</p>
+  <% if @monthly_count > 0 %>
+    <div>
+      <%= link_to "【所属長承認申請のお知らせ】", attendances_edit_monthly_aprv_user_path(date: @first_day), data: { turbo_frame: 'modal' }, class: "sp-link" %> <!--引数はそのuserの月初-->
+        <span class="notification-badge">
+          <%= "#{@monthly_count}件の通知があります" %>
+        </span>
+    </div>
+  <% end %>
+  
   <p>【勤怠変更申請のお知らせ】</p>
+  
   <% if @aprv_count > 0 %>
     <div>
       <%= link_to "【残業申請のお知らせ】", attendances_edit_overtime_aprv_user_path(date: @first_day), data: { turbo_frame: 'modal' }, class: "sp-link" %> <!--引数はそのuserの月初-->
@@ -148,7 +157,17 @@
         <td colspan="3">累計日数</td>
         <td colspan="6">累計基本勤務時間</td>
         <td colspan="2">累計在社時間</td>
-        <td colspan="5" rowspan="2"></td>
+        <td colspan="4" rowspan="2"></td>
+        <td>
+          <%= form_with(model: @user, url: attendances_update_monthly_req_user_path, local: true, method: :patch) do |f| %>
+            <%= f.fields_for "attendances[]", @attendance do |attendance| %>
+              所属長承認
+              
+              <%= attendance.collection_select :aprv_confirmed, @superior, :name, :name, { include_blank: true }, { class: 'form-control' } %>
+            <% end%>
+              <%= f.submit "申請", class: "btn btn-primary btn-block montly-req-btn" %>
+          <% end%>
+        </td>
       </tr>
 
       <tr>
@@ -157,7 +176,11 @@
         <td colspan="2"><%= format("%.2f", @total_working_times.to_f) %></td> <!--累計在社時間表示-->
       </tr>
 
-     
+      
+        
+        
+      
+        
     </tfoot>
   </table>
 </div>

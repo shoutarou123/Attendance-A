@@ -10,5 +10,8 @@ class AddOvertimeReqToAttendances < ActiveRecord::Migration[7.1]
     add_column :attendances, :overwork_chk, :boolean
     add_column :attendances, :overwork_status, :string
     add_column :attendances, :overtime_instructor, :string
+    add_column :attendances, :aprv_confirmed, :string
+    add_column :attendances, :aprv_chk, :boolean
+    add_column :attendances, :aprv_status, :string
   end
 end

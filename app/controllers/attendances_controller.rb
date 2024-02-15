@@ -1,9 +1,9 @@
 class AttendancesController < ApplicationController
 
   # application_controllerで定義しているのでattendance_controllerでも使用できる
-  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_req, :edit_overtime_aprv] # @user = User.find(params[:id])使いまわし
-  before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_req, :edit_overtime_aprv] # ﾛｸﾞｲﾝしていなければ勤怠登録、勤怠編集ﾍﾟｰｼﾞ遷移できない
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_req, :edit_overtime_aprv] # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_req, :edit_overtime_aprv, :update_overtime_req, :update_overtime_aprv, :edit_monthly_aprv] # @user = User.find(params[:id])使いまわし
+  before_action :logged_in_user, only: [:update, :edit_one_month, :edit_overtime_req, :edit_overtime_aprv, :update_overtime_req, :update_overtime_aprv, :edit_monthly_aprv] # ﾛｸﾞｲﾝしていなければ勤怠登録、勤怠編集ﾍﾟｰｼﾞ遷移できない
+  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month, :edit_overtime_req, :edit_overtime_aprv, :update_overtime_req, :update_overtime_aprv, :edit_monthly_aprv] # 管理権限者or現在ﾕｰｻﾞじゃないと勤怠更新、編集画面遷移、勤怠編集できない
   before_action :set_one_month, only: :edit_one_month # ﾍﾟｰｼﾞ出力前に1ヶ月分のﾃﾞｰﾀの存在を確認・ｾｯﾄを勤怠編集ﾍﾟｰｼﾞに適用
 
   def update
@@ -106,8 +106,36 @@ class AttendancesController < ApplicationController
         flash[:danger] = "残業申請の更新に失敗しました。"
       end
       redirect_to user_url(date: params[:date])
+    end
   end
-end
+  
+  def update_monthly_req # 1か月分の勤怠申請 patch
+    flag = 0
+    monthly_req_params.each do |id, item|
+      if item[:aprv_confirmed].present?
+        flag += 1
+        attendance = Attendance.find(id)
+        attendance.aprv_status = "申請中"
+        attendance.update(item)
+      end
+      if flag > 0
+        flash[:success] = "１カ月分の勤怠申請を送信しました。"
+      else
+        flash[:danger] = "１カ月分の勤怠申請に失敗しました。"
+      end
+      redirect_to user_url(date: params[:date])
+    end
+  end
+  
+  def edit_monthly_aprv # 上長への１カ月分の勤怠申請 get
+    @attendances = Attendance.where(aprv_confirmed: @user.name, aprv_status: "申請中") # confirmed_requestに名前があって、overwork_statusが申請中のものを探す
+    @users = User.where(id: @attendances.select(:user_id)) # idに上記のattendancesのuser_idが入っているものを取得
+    
+    respond_to do |format|
+      format.html { render partial: 'attendances/edit_monthly_aprv', locals: { attendance: @attendance } }
+      format.turbo_stream
+    end
+  end
 
   private
     def attendances_params # 1ヶ月分の勤怠情報を扱います
@@ -122,6 +150,9 @@ end
       params.require(:user).permit(attendances: [:overwork_status, :overwork_chk])[:attendances]
     end
 
+    def monthly_req_params
+      params.require(:user).permit(attendances: :aprv_confirmed)[:attendances]
+    end
      
     # beforeフィルター
     def admin_or_correct_user # 管理権限者、または現在ﾛｸﾞｲﾝしているﾕｰｻﾞｰを許可します。
