@@ -16,7 +16,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_02_140144) do
     t.datetime "started_at"
     t.datetime "finished_at"
     t.string "note"
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "over_time_req"
@@ -24,7 +24,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_02_140144) do
     t.string "chg_status"
     t.string "confirmed_request"
     t.string "task_description"
-    t.boolean "approved"
+    t.boolean "approved", default: false
     t.datetime "ended_at"
     t.boolean "overwork_chk"
     t.string "overwork_status"
