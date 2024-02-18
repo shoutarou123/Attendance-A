@@ -33,7 +33,7 @@ class AttendancesController < ApplicationController
   def update_one_month
     flag = 0
     attendances_params.each do |id, item|
-      unless item["started_at(4i)"].blank? || item["started_at(5i)"].blank? || item["finished_at(4i)"].blank? || item["finished_at(5i)"].blank?
+      unless item["started_at"].blank? || item["finished_at"].blank?
         attendance = Attendance.find(id)
         if item[:chg_next_day].present? && item[:chg_confirmed].present?
           unless attendance.chg_status == "申請中"
