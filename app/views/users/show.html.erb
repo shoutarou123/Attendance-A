@@ -122,8 +122,10 @@
           <td><%= l(day.started_at, format: :timeH) if day.started_at.present? %></td> <!--時-->
           <td><%= l(day.started_at, format: :timeM) if day.started_at.present? %></td> <!--分-->
           <td>
-            <% if btn_text = attendance_state(day) %> <!--attendance_helper参照-->
-              <%= link_to "#{btn_text}", user_attendance_path(@user, day), data: { turbo_method: :patch }, class: "btn btn-primary btn-attendance "%>
+            <% if current_user == @user %>
+              <% if btn_text = attendance_state(day) %> <!--attendance_helper参照-->
+                <%= link_to "#{btn_text}", user_attendance_path(@user, day), data: { turbo_method: :patch }, class: "btn btn-primary btn-attendance "%>
+              <% end %>
             <% end %>
           </td>
           <td><%= l(day.finished_at, format: :timeH) if day.finished_at.present? %></td> <!--時-->
