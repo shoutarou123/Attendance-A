@@ -30,25 +30,32 @@ class AttendancesController < ApplicationController
     @superior = User.where(superior: true).where.not(id: @current_user.id)
   end
 
-  def update_one_month # 勤怠編集 patch
-     ActiveRecord::Base.transaction do # トランザクションを開始します。
-      attendances_params.each do |id, item|
+  def update_one_month
+    flag = 0
+    attendances_params.each do |id, item|
+      unless item["started_at(4i)"].blank? || item["started_at(5i)"].blank? || item["finished_at(4i)"].blank? || item["finished_at(5i)"].blank?
         attendance = Attendance.find(id)
-          if item[:chg_next_day].present? && item[:chg_confirmed].present?
-            if attendance.b4_started_at.blank? && attendance.b4_finished_at.blank?
-              attendance.b4_started_at = attendance.started_at
-              attendance.b4_finished_at = attendance.finished_at
+        if item[:chg_next_day].present? && item[:chg_confirmed].present?
+          unless attendance.chg_status == "申請中"
+            flag += 1
+             # 初回の変更のみ保存
+            if attendance.b4_started_at.blank? && attendance.b4_finished_at.blank? # 変更前の開始・終了時間が空の時
+              attendance.b4_started_at = attendance.started_at # 変更後の開始時間を変更前に代入
+              attendance.b4_finished_at = attendance.finished_at # 変更後の終了時間を変更前に代入
             end
-            attendance.chg_status = "申請中"
+            attendance.chg_status = "申請中" # 申請中にする
             attendance.update!(item)
           end
+        end
       end
     end
-    flash[:success] = "1ヶ月分の勤怠情報を更新しました。"
-    redirect_to user_url(date: params[:date])
-  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
-    redirect_to attendances_edit_one_month_user_url(date: params[:date])
+    if flag > 0
+      flash[:success] = "勤怠変更申請を送信しました。"
+      redirect_to user_url(date: params[:date])
+    else
+      flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+      redirect_to attendances_edit_one_month_user_url(date: params[:date])
+    end
   end
   
   def edit_chg_req # 上長への勤怠編集申請
@@ -59,6 +66,37 @@ class AttendancesController < ApplicationController
       format.html { render partial: 'attendances/edit_chg_req', locals: { attendance: @attendance } }
       format.turbo_stream
     end
+  end
+  
+  def update_chg_req
+    flag = 0
+    chg_req_params.each do |id, item|
+       if item[:chg_chk] == "1" # 変更チェックがあれば
+         unless item[:chg_status] == "申請中" # 指示者確認が申請中でない場合
+           flag += 1 # flagに1を足し上げる
+           attendance = Attendance.find(id) # Attendance.idを取得
+           if item[:chg_status] == "なし" # 指示者確認がなしの場合
+             attendance.started_at = attendance.b4_started_at # 変更前開始時間を変更後開始時間へ代入
+             attendance.finished_at = attendance.b4_finished_at # 変更前終了時間を変更後終了時間へ代入
+             attendance.note = nil # 備考を空にする
+           elsif item[:chg_status] == "否認" # 指示者確認が否認の場合
+             attendance.started_at = attendance.b4_started_at # 変更前開始時間を変更後開始時間へ代入
+             attendance.finished_at = attendance.b4_finished_at # 変更前終了時間を変更後終了時間へ代入
+             attendance.note = nil # 備考を空にする
+           end
+           attendance.aprv_day = Date.current # 現在の日付をaprv_dayに代入
+           attendance.aprv_sup = attendance.chg_confirmed # 指示者確認者をaprv_supに代入
+           attendance.chg_confirmed = nil # 指示者確認者を空にする
+           attendance.update(item) # item内を更新する
+         end
+       end
+    end
+    if flag > 0
+      flash[:success] = "勤怠変更申請を更新しました。"
+    else
+      flash[:danger] = "勤怠変更申請の更新に失敗しました。"
+    end
+    redirect_to user_url(date: params[:date])
   end
   
   def edit_overtime_req  #残業申請
@@ -182,6 +220,10 @@ class AttendancesController < ApplicationController
   private
     def attendances_params # 1ヶ月分の勤怠情報を扱います
       params.require(:user).permit(attendances: [:started_at, :finished_at, :chg_next_day, :note, :chg_confirmed])[:attendances]
+    end
+    
+    def chg_req_params
+      params.require(:user).permit(attendances: [:chg_status, :chg_chk])[:attendances]
     end
     
     def overtime_req_params

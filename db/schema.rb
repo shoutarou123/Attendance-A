@@ -36,6 +36,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_02_140144) do
     t.datetime "b4_started_at"
     t.datetime "b4_finished_at"
     t.boolean "chg_chk"
+    t.date "aprv_day"
+    t.string "aprv_sup"
     t.index ["user_id"], name: "index_attendances_on_user_id"
   end
 
