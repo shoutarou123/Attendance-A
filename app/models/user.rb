@@ -52,6 +52,7 @@ class User < ApplicationRecord
 
   def self.import(file)
     CSV.foreach(file.path, headers: true, encoding: 'Shift_JIS:UTF-8') do |row| # CSV.foreach CSVﾌｧｲﾙを一行ずつ処理するﾒｿｯﾄﾞ fileはﾌｧｲﾙｵﾌﾞｼﾞｪｸﾄ,pathでそのﾊﾟｽを取得 CSVﾌｧｲﾙの最初の行がﾍｯﾀﾞｰ情報を含んでいるか指定。trueの場合ﾍｯﾀﾞｰ行は処理対象から除外。ｴﾝｺｰﾃﾞｨﾝｸﾞをUTF-8に変換。
+      next if row["email"].nil? # emailカラムがNULLの場合はスキップする
       user = find_by(name: row["name"]) || new # 名前が見つかればﾚｺｰﾄﾞを呼び出し見つかれなければ新しく作成
       user.attributes = row.to_hash.slice(*updatable_attributes) # CSVからデータを取得し、設定する
       user.save
