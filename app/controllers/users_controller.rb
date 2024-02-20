@@ -45,7 +45,12 @@ class UsersController < ApplicationController
     @monthly_count = Attendance.where(aprv_confirmed: @user.name, aprv_status: "申請中").count # 上長への１カ月分の勤怠申請の件数
     @month_count = Attendance.where(chg_confirmed: @user.name, chg_status: "申請中").count # 勤怠変更のお知らせ件数
     @aprv_count = Attendance.where(confirmed_request: @user.name, overwork_status: "申請中").count # 残業申請のお知らせ件数
-    @overtime_instructor = @attendances.first.overtime_instructor if @attendances.first  
+    @overtime_instructor = @attendances.first.overtime_instructor if @attendances.first
+    
+    respond_to do |format|
+      format.html
+      format.csv { send_data User.generate_csv(@attendances), filename: "#{@user.name}_#{Time.zone.now.strftime('%Y年%m月分')}.csv" }
+    end   
   end
   
   def new

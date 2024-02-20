@@ -53,12 +53,28 @@ class User < ApplicationRecord
   def self.import(file)
     CSV.foreach(file.path, headers: true, encoding: 'Shift_JIS:UTF-8') do |row| # CSV.foreach CSVﾌｧｲﾙを一行ずつ処理するﾒｿｯﾄﾞ fileはﾌｧｲﾙｵﾌﾞｼﾞｪｸﾄ,pathでそのﾊﾟｽを取得 CSVﾌｧｲﾙの最初の行がﾍｯﾀﾞｰ情報を含んでいるか指定。trueの場合ﾍｯﾀﾞｰ行は処理対象から除外。ｴﾝｺｰﾃﾞｨﾝｸﾞをUTF-8に変換。
       user = find_by(name: row["name"]) || new # 名前が見つかればﾚｺｰﾄﾞを呼び出し見つかれなければ新しく作成
-      user.attributes = row.to_hash.slice(*updatable_attributes)
+      user.attributes = row.to_hash.slice(*updatable_attributes) # CSVからデータを取得し、設定する
       user.save
     end
   end
 
   def self.updatable_attributes # 更新を許可するｶﾗﾑを定義
     ["name", "email", "affiliation", "employee_number", "uid", "password", "password_confirmation", "basic_work_time", "designated_work_start_time", "designated_work_end_time", "superior", "admin"]
+  end
+  
+  def self.generate_csv(attendances)
+    CSV.generate(headers: true) do |csv|
+      csv << ['日付', '曜日', '出社', '退社', '備考']  
+       attendances.each do |attendance|
+
+        csv << [
+          attendance.worked_on.strftime('%m/%d'),  # 日付を指定のフォーマットに変換
+          attendance.worked_on.strftime('%a'),    # 曜日を取得
+          (attendance.chg_status == '申請中' ? '' : attendance.started_at&.strftime('%H:%M')),  # 出社時間を取得または'申請中'
+          (attendance.chg_status == '申請中' ? '' : attendance.finished_at&.strftime('%H:%M')), # 退社時間を取得または'申請中'
+          attendance.note
+        ]
+      end
+    end
   end
 end
