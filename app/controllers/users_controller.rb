@@ -76,7 +76,8 @@ class UsersController < ApplicationController
       flash[:success] = "ユーザー情報を更新しました。"
       redirect_to @user # redirect_to user_url(@user)と同じ意味
     else
-      render 'edit', status: :unprocessable_entity
+      flash[:danger] = "ユーザー情報を更新できませんでした。"
+      redirect_to @user
     end
   end
 

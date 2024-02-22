@@ -26,7 +26,7 @@
                 <div class="collapse" id="demo_<%= user.id %>">
                   <div class="card card-body">
                         
-                    <%= form_with(model: user, url: user_path(user),  method: :patch, local: true) do |f| %>
+                    <%= form_with(model: user, url: user_path(user), method: :patch, local: true) do |f| %>
 
                       <%= f.label :name, class: "label-#{yield(:class_text)}" %> <!--名前-->
                       <%= f.text_field :name, class: "form-control" %>
