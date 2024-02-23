@@ -162,7 +162,7 @@ class AttendancesController < ApplicationController
       else
         flash[:danger] = "残業申請の更新に失敗しました。"
       end
-      redirect_to user_url(date: params[:date])
+      redirect_to user_url(date: params[:date]) and return # 1人から複数の残業申請があった場合全部承認等するとredirect_toﾀﾞﾌﾞﾙｴﾗｰになるためand return追加
     end
   end
   

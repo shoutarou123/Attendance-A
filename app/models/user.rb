@@ -3,7 +3,7 @@ class User < ApplicationRecord
                                              # userが削除されたら紐づけられたattendanceも一緒に削除される
   attr_accessor :remember_token # remember_tokenという仮想の属性を作成する。
   before_save { self.email = email.downcase } # email小文字化
-
+  
   validates :name,  presence: true, length: { maximum: 50 }
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i # 正規表現
