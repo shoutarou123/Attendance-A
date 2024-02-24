@@ -35,13 +35,13 @@ class UsersController < ApplicationController
   end
 
   def show
+    # @first_day = Date.current.beginning_of_month # 現在日付の月初 この２つがあると月切替が機能しなくなる
+    # @last_day = @first_day.end_of_month # 上記の月の末日
     @current_user = current_user
     @superior = User.where(superior: true).where.not(id: @current_user.id)
     @attendance = @user.attendances.find_by(worked_on: @first_day)
     @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)   # 該当日の残業申請取得
     @worked_sum = @attendances.where.not(started_at: nil).count # 出社が何も無いじゃない数
-    @first_day = Date.current.beginning_of_month # 現在日付の月初
-    @last_day = @first_day.end_of_month # 上記の月の末日
     @monthly_count = Attendance.where(aprv_confirmed: @user.name, aprv_status: "申請中").count # 上長への１カ月分の勤怠申請の件数
     @month_count = Attendance.where(chg_confirmed: @user.name, chg_status: "申請中").count # 勤怠変更のお知らせ件数
     @aprv_count = Attendance.where(confirmed_request: @user.name, overwork_status: "申請中").count # 残業申請のお知らせ件数
