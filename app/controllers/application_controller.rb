@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user?(user)
-    user = current_user
+    user == current_user # =だと別のユーザーの情報見れてしまう
   end
 
   def correct_user # ｱｸｾｽしたﾕｰｻﾞｰが現在ﾛｸﾞｲﾝしているﾕｰｻﾞｰか確認します
