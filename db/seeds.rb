@@ -26,12 +26,29 @@ User.create!(name: "上長A",
              password_confirmation: "password",
              role: "superior",
              superior: true)
-
+             
+             User.create!(name: "一般C",
+             email: "sample-C@email.com",
+             employee_number: 4,
+             uid: 004,
+             password: "password",
+             password_confirmation: "password")
+             
+             User.create!(name: "一般D",
+             email: "sample-D@email.com",
+             employee_number: 5,
+             uid: 005,
+             password: "password",
+             password_confirmation: "password")
+             
 BasePoint.create!(number: 1,
                   name: "拠点１",
                   attendance_type: "出勤")
+BasePoint.create!(number: 2,
+                  name: "拠点２",
+                  attendance_type: "出勤")
 
-60.times do |n|
+10.times do |n|
   name  = Faker::Name.name
   email = "sample-#{n+1}@email.com"
   password = "password"
