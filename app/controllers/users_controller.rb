@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :attendance_log] # correct_userのbefore_actionで同じ@userが2回使用されてしまうため本ﾒｿｯﾄﾞを各ｱｸｼｮﾝに定義している
-  before_action :set_users, only: :show
+  before_action :set_users, only: [:index, :show]
   before_action :logged_in_user, only: [:index, :show, :working, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :attendance_log] # ﾛｸﾞｲﾝしていなければ一覧画面、出勤中一覧画面、編集画面、編集更新、削除、基本情報編集できない
   before_action :superior_users, only: [:show]
   before_action :correct_user, only: [:edit] # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 
   def index
     # @users = User.paginate(page: params[:page]) # User.allから変更。paginateではｷｰが:pageで値がﾍﾟｰｼﾞ番号のﾊｯｼｭを引数にとります。User.paginateは:pageﾊﾟﾗﾒｰﾀに基づき、ﾃﾞｰﾀﾍﾞｰｽから一塊のﾃﾞｰﾀを取得する。ﾃﾞﾌｫﾙﾄは30件。
-    @users = User.page(params[:page]).per(30) # kaminariでのpeginateに変更
+    # @users = User.page(params[:page]).per(30) # kaminariでのpeginateに変更
   end
 
   def import

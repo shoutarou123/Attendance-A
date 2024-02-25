@@ -2,7 +2,7 @@
 <% provide(:class_text, 'user--edit') %>
 <% provide(:button_text, '更新') %>
 <h1>ユーザー一覧</h1>
-  <%= paginate @users, theme: 'twitter-bootstrap-4' %> <!--will pegenateからkaminariに変更-->
+ 
     <div class="col">
       <%= form_with url: import_users_path(format: :csv), local: true, multipart: true do |f| %> <!--multipart trueにしないと適切に送信できない-->
         <%= f.file_field :file, accept: '.csv', class: "btn btn-default" %> <!--csv形式ﾌｧｲﾙだけ選択できるように制限-->
