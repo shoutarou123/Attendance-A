@@ -3,7 +3,7 @@ class UsersController < ApplicationController
   before_action :set_users, only: [:index, :show]
   before_action :logged_in_user, only: [:index, :show, :working, :edit, :update, :destroy, :edit_basic_info, :update_basic_info, :attendance_log] # ﾛｸﾞｲﾝしていなければ一覧画面、出勤中一覧画面、編集画面、編集更新、削除、基本情報編集できない
   before_action :superior_users, only: [:show]
-  before_action :correct_user, only: [:edit] # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
+  before_action :correct_user, only: [:show, :edit] # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
   before_action :admin_user, only: [:index, :working, :update, :destroy, :edit_basic_info, :update_basic_info] # 管理権限がないと削除、基本情報編集できない。
   before_action :set_one_month, only: :show # ﾍﾟｰｼﾞ出力前に1ヶ月分のﾃﾞｰﾀの存在を確認・ｾｯﾄ showｱｸｼｮﾝ実行前に発動
   before_action :superior_or_correct_user, only: [:show]
