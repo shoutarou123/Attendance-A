@@ -150,20 +150,21 @@ class AttendancesController < ApplicationController
           if item[:overwork_status] == "なし" # 指示者確認がなしの場合
             attendance.ended_at = nil # 終了予定時間がnilになる
             attendance.task_description = nil # 業務処理内容がnilになる
-          elsif item[:overwork_status] == "否認"
+          elsif
+            item[:overwork_status] == "否認"
             attendance.ended_at = nil
             attendance.task_description = nil
           end
           attendance.update(item) # attendance(item)を更新する
         end
       end
-      if flag > 0
-        flash[:success] = "残業申請を更新しました。"
-      else
-        flash[:danger] = "残業申請の更新に失敗しました。"
-      end
-      redirect_to user_url(date: params[:date]) and return # 1人から複数の残業申請があった場合全部承認等するとredirect_toﾀﾞﾌﾞﾙｴﾗｰになるためand return追加
     end
+    if flag > 0
+      flash[:success] = "残業申請を更新しました。"
+    else
+      flash[:danger] = "残業申請の更新に失敗しました。"
+    end
+    redirect_to user_url(date: params[:date]) # 1人から複数の残業申請があった場合全部承認等するとredirect_toﾀﾞﾌﾞﾙｴﾗｰになるためand return追加
   end
   
   def update_monthly_req # 1か月分の勤怠申請 patch
