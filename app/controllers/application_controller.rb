@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
     # @user = User.find(params[:id])の記述が不要になる理由は上記のset_userで定義しており、引数に@userを指定しているため。
     redirect_to(root_url) unless current_user?(@user) # ﾕｰｻﾞｰが現在ﾕｰｻﾞｰと一致しなければ、ﾄｯﾌﾟﾍﾟｰｼﾞに遷移。ｾｯｼｮﾝﾍﾙﾊﾟｰのﾒｿｯﾄﾞを使用。
   end
-
+  
   def admin_user # ｼｽﾃﾑ管理権限所有かどうか判定します。
     redirect_to(root_url) unless current_user.admin? # 管理権限がなければﾄｯﾌﾟﾍﾟｰｼﾞに遷移
   end

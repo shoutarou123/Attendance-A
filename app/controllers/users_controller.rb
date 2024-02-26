@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   before_action :correct_user, only: [:edit] # 現在ﾕｰｻﾞｰの情報のみ変更可。違うﾕｰｻﾞｰの変更不可。
   before_action :admin_user, only: [:index, :working, :destroy, :edit_basic_info, :update_basic_info] # 管理権限がないと削除、基本情報編集できない。
   before_action :set_one_month, only: :show # ﾍﾟｰｼﾞ出力前に1ヶ月分のﾃﾞｰﾀの存在を確認・ｾｯﾄ showｱｸｼｮﾝ実行前に発動
-
+  before_action :superior_or_correct_user, only: [:show, :edit, :update]
   def index
     # @users = User.paginate(page: params[:page]) # User.allから変更。paginateではｷｰが:pageで値がﾍﾟｰｼﾞ番号のﾊｯｼｭを引数にとります。User.paginateは:pageﾊﾟﾗﾒｰﾀに基づき、ﾃﾞｰﾀﾍﾞｰｽから一塊のﾃﾞｰﾀを取得する。ﾃﾞﾌｫﾙﾄは30件。
     # @users = User.page(params[:page]).per(30) # kaminariでのpeginateに変更
@@ -107,5 +107,13 @@ class UsersController < ApplicationController
 
     def user_params #StrongParametersなのでここに記述しないと更新が反映されない。
       params.require(:user).permit(:name, :email, :affiliation, :employee_number, :uid, :password, :password_confirmation, :basic_work_time, :designated_work_start_time, :designated_work_end_time)
+    end
+    
+    def superior_or_correct_user # 管理権限者、または現在ﾛｸﾞｲﾝしているﾕｰｻﾞｰを許可します。
+      @user = User.find(params[:user_id]) if @user.blank? # @userが空だったらuser_idを探して代入
+      unless current_user?(@user) || current_user.superior? # 現在ﾕｰｻﾞｰじゃない又は管理権限が無い場合
+        flash[:danger] = "権限がありません。"
+        redirect_to(root_url)
+      end
     end
 end
